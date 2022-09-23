@@ -19,4 +19,16 @@
 
 ## Introduction
 
-Solv [sɑːlv] is a cli application for solving algorithm problems with HMR-like feature.
+Solv [sɑːlv] is a cli application for solving coding challenges with live updaing feature.
+
+## Installation
+
+```bash
+$ npm install -g solv-cli
+```
+
+## Usage
+
+```bash
+$ solv <sourcePath> <url>
+```
