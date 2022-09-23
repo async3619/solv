@@ -2,13 +2,14 @@
     "compilerOptions": {
         "strict": true,
         "module": "commonjs",
-        "declaration": true,
+        "declaration": false,
+        "moduleResolution": "Node",
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "target": "es2017",
-        "sourceMap": true,
+        "sourceMap": false,
         "outDir": "./dist",
         "baseUrl": "./",
         "incremental": true,
@@ -18,5 +19,6 @@
         "strictBindCallApply": false,
         "forceConsistentCasingInFileNames": false,
         "noFallthroughCasesInSwitch": false
-    }
+    },
+    "exclude": ["node_modules", "**/*spec.ts", "./index.ts"]
 }
