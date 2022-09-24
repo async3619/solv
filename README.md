@@ -12,7 +12,7 @@
 <div align="center">
   <img src="https://img.shields.io/github/license/async3619/solv.svg?style=flat-square" alt="MIT License" />
   <br />
-  <sup>Hot-problem-solving application for any services.</sup>
+  <sup>Hot-challenge-solving application for any coding challenge services.</sup>
   <br />
   <br />
 </div>
@@ -30,5 +30,5 @@ $ npm install -g solv-cli
 ## Usage
 
 ```bash
-$ solv <sourcePath> <url>
+$ solv <path> <url>
 ```
