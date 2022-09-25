@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-            - dev
 
 jobs:
     build-and-deploy:
@@ -55,7 +54,6 @@ jobs:
                   yarn lint
 
             - name: Release
-              if: matrix.prebuild && contains(matrix.container, 'alpine')
               env:
                   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
