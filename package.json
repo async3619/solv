@@ -5,7 +5,8 @@
     "scripts": {
         "build": "tsc",
         "dev": "nodemon",
-        "semantic-release": "semantic-release"
+        "semantic-release": "semantic-release",
+        "lint": "eslint \"src/**/*.ts\""
     },
     "bin": {
         "solv": "./bin/solv.cjs"
@@ -21,9 +22,9 @@
         "@types/node": "^18.6.4",
         "@types/node-fetch": "^2.6.2",
         "@types/uuid": "^8.3.4",
-        "@typescript-eslint/eslint-plugin": "^5.32.0",
-        "@typescript-eslint/parser": "^5.32.0",
-        "eslint": "^8.21.0",
+        "@typescript-eslint/eslint-plugin": "^5.38.0",
+        "@typescript-eslint/parser": "^5.38.0",
+        "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",
         "nodemon": "^2.0.20",
