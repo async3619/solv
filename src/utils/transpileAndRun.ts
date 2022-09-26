@@ -31,5 +31,5 @@ export async function transpileAndRun(input: InputType, output: string, targetPa
     vm.on("console.warn", handleConsoleMessage);
     vm.run(transpiledContent.code);
 
-    return outputBuffer.join("\n");
+    return outputBuffer.join("\n").replace(/\r\n/g, "\n");
 }
