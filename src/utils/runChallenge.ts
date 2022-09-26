@@ -2,7 +2,7 @@ import * as Listr from "listr";
 import * as chalk from "chalk";
 
 import { breakLine, drawLine } from "../cli";
-import { Challenge } from "../types";
+import { Challenge, InputType } from "../types";
 
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
@@ -21,6 +21,22 @@ function renderSection(title: string, content: any, chalkFunction: (target: stri
     breakLine();
 }
 
+async function runTestCase(index: number, input: InputType, output: string, targetPath: string) {
+    try {
+        const { output: outputText, result } = await transpileAndRun(JSON.stringify(input), output, targetPath);
+
+        if (result !== outputText) {
+            throw new TestCaseFailedError(index, result);
+        }
+    } catch (e) {
+        if (e instanceof TestCaseFailedError) {
+            throw e;
+        } else if (e instanceof Error) {
+            throw new TestCaseFailedError(index, (e as any).stderr || e.message, "Test case failed with an error");
+        }
+    }
+}
+
 export async function runChallenge(challenge: Challenge, targetPath: string) {
     breakLine();
 
@@ -28,30 +44,7 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
     const instance = new Listr(
         challenge.input.map((_, index) => ({
             title: `Running with test case #${index + 1}`,
-            task: async () => {
-                currentTestCaseIndex = index;
-                try {
-                    const { output, result } = await transpileAndRun(
-                        JSON.stringify(challenge.input[index]),
-                        challenge.output[index],
-                        targetPath,
-                    );
-
-                    if (result !== output) {
-                        throw new TestCaseFailedError(index, result);
-                    }
-                } catch (e) {
-                    if (e instanceof TestCaseFailedError) {
-                        throw e;
-                    } else if (e instanceof Error) {
-                        throw new TestCaseFailedError(
-                            index,
-                            (e as any).stderr || e.message,
-                            "Test case failed with an error",
-                        );
-                    }
-                }
-            },
+            task: () => runTestCase(index, challenge.input[index], challenge.output[index], targetPath),
         })),
     );
 

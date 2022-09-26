@@ -1,26 +1,29 @@
+import * as util from "util";
 import * as fs from "fs-extra";
 import * as esbuild from "esbuild";
-import { node } from "execa";
+import { NodeVM } from "vm2";
 
-import { getTranspiledPath } from "../utils/path";
+import { InputType } from "../types";
 
-export async function transpileAndRun(input: string, output: string, targetPath: string) {
+export async function transpileAndRun(input: InputType, output: string, targetPath: string) {
     const fileContent = await fs.readFile(targetPath).then(res => res.toString());
     const transpiledContent = esbuild.transformSync(fileContent, {
         loader: "ts",
     });
 
-    const targetFilePath = await getTranspiledPath();
-    await fs.writeFile(targetFilePath, transpiledContent.code);
+    const outputBuffer: string[] = [];
+    const handleConsoleMessage = (...data: any[]) => {
+        outputBuffer.push(data.map(v => (typeof v === "string" ? v : util.inspect(v))).join(" "));
+    };
 
-    const process = node(targetFilePath.replace(/\\/g, "/"), {
-        input,
-    });
-    const result = await process;
+    const vm = new NodeVM({ console: "redirect" });
+    vm.on("console.log", handleConsoleMessage);
+    vm.on("console.info", handleConsoleMessage);
+    vm.on("console.warn", handleConsoleMessage);
+    vm.run(transpiledContent.code);
 
     return {
-        input,
         output,
-        result: result.stdout,
+        result: outputBuffer.join("\n"),
     };
 }
