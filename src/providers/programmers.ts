@@ -21,7 +21,10 @@ export class ProgrammersProvider extends BaseProvider {
     }
 
     public async retrieve(url: string): Promise<Challenge> {
-        const htmlCode = await this.fetch(url);
+        const targetUrl = new URL(url);
+        targetUrl.searchParams.set("language", "javascript");
+
+        const htmlCode = await this.fetch(targetUrl.toString());
 
         const document = parseDOM(htmlCode);
         const descriptionDOM = document.querySelector("#tour2 > div > div");
@@ -50,8 +53,14 @@ export class ProgrammersProvider extends BaseProvider {
             throw new Error("Failed to parse initial code information.");
         }
 
+        const id = targetUrl.pathname.split("/").at(-1);
+        if (!id) {
+            throw new Error("Failed to retrieve challenge id.");
+        }
+
         return {
             ...parseSampleTable(ioSampleTable),
+            id,
             title: titleDOM.textContent.trim(),
             description: descriptionDOM.textContent.trim(),
             provider: this,
