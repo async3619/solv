@@ -1,4 +1,4 @@
-import * as listr from "listr";
+import * as Listr from "listr";
 import * as chalk from "chalk";
 
 import { breakLine, drawLine } from "../cli";
@@ -7,18 +7,32 @@ import { Challenge } from "../types";
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
 
+function renderSection(title: string, content: any, chalkFunction: (target: string) => string) {
+    let contentText: string | null = null;
+    if (typeof content === "string") {
+        contentText = content;
+    } else if (typeof content === "object") {
+        contentText = JSON.stringify(content);
+    }
+
+    console.info(title);
+    drawLine(15);
+    console.info(chalkFunction(contentText || chalk.italic("(empty)")));
+    breakLine();
+}
+
 export async function runChallenge(challenge: Challenge, targetPath: string) {
     breakLine();
 
     let currentTestCaseIndex = 0;
-    const instance = new listr(
+    const instance = new Listr(
         challenge.input.map((_, index) => ({
             title: `Running with test case #${index + 1}`,
             task: async () => {
                 currentTestCaseIndex = index;
                 try {
                     const { output, result } = await transpileAndRun(
-                        challenge.input[index],
+                        JSON.stringify(challenge.input[index]),
                         challenge.output[index],
                         targetPath,
                     );
@@ -60,21 +74,8 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
         const output = challenge.output[currentTestCaseIndex];
 
         breakLine(2);
-
-        console.info("Input");
-        drawLine(15);
-        console.info(chalk.cyan(input));
-
-        breakLine();
-
-        console.info("Output (expected)");
-        drawLine(15);
-        console.info(chalk.green(output));
-
-        breakLine();
-
-        console.info("Output");
-        drawLine(15);
-        console.info(chalk.red(result));
+        renderSection("Input", input, chalk.cyan);
+        renderSection("Output (expected)", output, chalk.green);
+        renderSection("Output", result, chalk.red);
     }
 }

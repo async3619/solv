@@ -3,6 +3,6 @@ export interface Challenge {
     description?: string;
     inputDescription?: string;
     outputDescription?: string;
-    input: string[];
+    input: Array<Record<string, string> | string>;
     output: string[];
 }

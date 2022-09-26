@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { parse as parseDOM } from "node-html-parser";
 
 import { BaseProvider } from "./base";
@@ -12,12 +11,7 @@ export class BaekjoonProvider extends BaseProvider {
     }
 
     public async retrieve(url: string): Promise<Challenge> {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch (${response.status}) - ${response.statusText}`);
-        }
-
-        const htmlCode = await response.text();
+        const htmlCode = await this.fetch(url);
         const document = parseDOM(htmlCode);
 
         const titleDOM = document.querySelector("#problem_title");
