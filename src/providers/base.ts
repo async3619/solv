@@ -1,9 +1,18 @@
-import { Challenge } from "../types";
+import { Challenge, InputType } from "../types";
 import fetch from "node-fetch";
 
 export abstract class BaseProvider {
     public abstract checkUrl(url: string): boolean;
     public abstract retrieve(url: string): Promise<Challenge>;
+
+    public serializeOutput(outputItem: any): string {
+        return typeof outputItem !== "string" ? JSON.stringify(outputItem) : outputItem;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public beforeExecute(sourceCode: string, input: InputType): string {
+        return sourceCode;
+    }
 
     public getName(): string {
         return this.constructor.name.replace("Provider", "");

@@ -3,5 +3,5 @@
     "ignore": ["*.test.js", "bin", "dist", ".git"],
     "watch": ["src"],
     "ext": "ts",
-    "exec": "yarn build && solv ./index.ts https://school.programmers.co.kr/learn/courses/30/lessons/70132"
+    "exec": "yarn build && solv ./index.ts https://www.acmicpc.net/problem/10718"
 }

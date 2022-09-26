@@ -41,6 +41,7 @@ export class BaekjoonProvider extends BaseProvider {
             outputDescription: outputDescriptionDOM.textContent.trim(),
             input: ioText.filter(([i]) => i).map(([, t]) => t),
             output: ioText.filter(([i]) => !i).map(([, t]) => t),
+            provider: this,
         };
     }
 }

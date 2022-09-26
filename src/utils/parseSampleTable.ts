@@ -38,14 +38,14 @@ export function parseSampleTable(table: HTMLElement): Pick<Challenge, "output" |
 
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
-        const inputValues: Record<string, string> = {};
+        const inputValues: string[] = [];
         for (let j = 0; j < columns.length; j++) {
-            if (columns[j].toLowerCase() === "result") {
+            if (j === columns.length - 1) {
                 result.output.push(row[j]);
                 continue;
             }
 
-            inputValues[columns[j]] = row[j];
+            inputValues.push(row[j]);
         }
 
         result.input.push(inputValues);

@@ -1,4 +1,6 @@
-export type InputType = Record<string, string> | string;
+import { BaseProvider } from "./providers/base";
+
+export type InputType = string[] | string;
 
 export interface Challenge {
     title: string;
@@ -7,4 +9,6 @@ export interface Challenge {
     outputDescription?: string;
     input: InputType[];
     output: string[];
+    provider: BaseProvider;
+    initialCode?: string;
 }

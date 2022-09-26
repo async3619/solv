@@ -4,15 +4,18 @@ import * as chalk from "chalk";
 import { breakLine, drawLine } from "../cli";
 import { Challenge, InputType } from "../types";
 
+import { BaseProvider } from "../providers/base";
+
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
+import { serialize } from "./serialize";
 
-function renderSection(title: string, content: any, chalkFunction: (target: string) => string) {
-    let contentText: string | null = null;
-    if (typeof content === "string") {
+function renderSection(title: string, content: InputType, chalkFunction: (target: string) => string) {
+    let contentText: string | null;
+    if (Array.isArray(content)) {
+        contentText = content.map(item => serialize(JSON.parse(item))).join(" ");
+    } else {
         contentText = content;
-    } else if (typeof content === "object") {
-        contentText = JSON.stringify(content);
     }
 
     console.info(title);
@@ -21,11 +24,16 @@ function renderSection(title: string, content: any, chalkFunction: (target: stri
     breakLine();
 }
 
-async function runTestCase(index: number, input: InputType, output: string, targetPath: string) {
+async function runTestCase(
+    index: number,
+    input: InputType,
+    output: string,
+    targetPath: string,
+    provider: BaseProvider,
+) {
     try {
-        const { output: outputText, result } = await transpileAndRun(JSON.stringify(input), output, targetPath);
-
-        if (result !== outputText) {
+        const result = await transpileAndRun(input, output, targetPath, provider);
+        if (result !== output) {
             throw new TestCaseFailedError(index, result);
         }
     } catch (e) {
@@ -44,7 +52,8 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
     const instance = new Listr(
         challenge.input.map((_, index) => ({
             title: `Running with test case #${index + 1}`,
-            task: () => runTestCase(index, challenge.input[index], challenge.output[index], targetPath),
+            task: () =>
+                runTestCase(index, challenge.input[index], challenge.output[index], targetPath, challenge.provider),
         })),
     );
 
