@@ -5,6 +5,8 @@ import { NodeVM } from "vm2";
 import { InputType } from "../types";
 import { BaseProvider } from "../providers/base";
 
+const replaceExt = require("replace-ext");
+
 export async function transpileAndRun(input: InputType, output: string, targetPath: string, provider: BaseProvider) {
     let fileContent = await fs.readFile(targetPath).then(res => res.toString());
     fileContent = provider.beforeExecute(fileContent, input);
@@ -12,6 +14,11 @@ export async function transpileAndRun(input: InputType, output: string, targetPa
     const transpiledContent = esbuild.transformSync(fileContent, {
         loader: "ts",
     });
+
+    if (provider.needJs) {
+        const transpiledFilePath = replaceExt(targetPath, ".js");
+        await fs.writeFile(transpiledFilePath, transpiledContent.code);
+    }
 
     const outputBuffer: string[] = [];
     const handleConsoleMessage = (...data: any[]) => {

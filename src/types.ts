@@ -10,6 +10,7 @@ export interface Challenge {
     outputDescription?: string;
     input: InputType[];
     output: string[];
+    needJs?: boolean;
     provider: BaseProvider;
     initialCode?: string;
 }

@@ -5,6 +5,8 @@ export abstract class BaseProvider {
     public abstract checkUrl(url: string): boolean;
     public abstract retrieve(url: string): Promise<Challenge>;
 
+    protected constructor(public readonly needJs: boolean) {}
+
     public serializeOutput(outputItem: any): string {
         return typeof outputItem !== "string" ? JSON.stringify(outputItem) : outputItem;
     }

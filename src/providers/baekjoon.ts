@@ -6,6 +6,10 @@ import { Challenge } from "../types";
 export class BaekjoonProvider extends BaseProvider {
     private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/([0-9]*?)$/;
 
+    public constructor() {
+        super(true);
+    }
+
     public checkUrl(url: string) {
         return this.urlRegex.test(url);
     }

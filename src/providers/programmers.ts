@@ -8,6 +8,10 @@ import { parseSampleTable } from "../utils/parseSampleTable";
 import { Challenge } from "../types";
 
 export class ProgrammersProvider extends BaseProvider {
+    public constructor() {
+        super(false);
+    }
+
     public checkUrl(url: string): boolean {
         return /(https?:\/\/)?(school\.)?programmers\.co\.kr\/learn\/courses\/([0-9]*?)\/lessons\/([0-9]*?)$/.test(url);
     }
