@@ -1,4 +1,5 @@
 import { parse as parseDOM } from "node-html-parser";
+import { decode } from "html-entities";
 
 import { BaseProvider } from "./base";
 import { Challenge } from "../types";
@@ -51,7 +52,7 @@ export class BaekjoonProvider extends BaseProvider {
             inputDescription: inputDescriptionDOM.textContent.trim(),
             outputDescription: outputDescriptionDOM.textContent.trim(),
             input: ioText.filter(([i]) => i).map(([, t]) => t),
-            output: ioText.filter(([i]) => !i).map(([, t]) => t.replace(/\r\n/g, "\n")),
+            output: ioText.filter(([i]) => !i).map(([, t]) => decode(t).replace(/\r\n/g, "\n")),
             provider: this,
             initialCode: `
 function solution(input: string[]) {

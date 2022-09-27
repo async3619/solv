@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import { HTMLElement, Node, NodeType } from "node-html-parser";
+import { decode } from "html-entities";
 
 import { Challenge } from "../types";
 
@@ -41,7 +42,7 @@ export function parseSampleTable(table: HTMLElement): Pick<Challenge, "output" |
         const inputValues: string[] = [];
         for (let j = 0; j < columns.length; j++) {
             if (j === columns.length - 1) {
-                result.output.push(row[j]);
+                result.output.push(decode(row[j]));
                 continue;
             }
 
