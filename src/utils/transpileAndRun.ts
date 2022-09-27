@@ -24,6 +24,12 @@ export async function transpileAndRun(input: InputType, output: string, targetPa
         sandbox: {
             input: inputData,
         },
+        require: {
+            builtin: ["readline", "events"],
+        },
+        env: {
+            arguments: inputData,
+        },
     });
 
     vm.on("console.log", handleConsoleMessage);
