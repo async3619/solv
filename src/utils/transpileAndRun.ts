@@ -7,7 +7,12 @@ import { BaseProvider } from "../providers/base";
 
 const replaceExt = require("replace-ext");
 
-export async function transpileAndRun(input: InputType, output: string, targetPath: string, provider: BaseProvider) {
+export async function transpileAndRun(
+    input: InputType,
+    output: string,
+    targetPath: string,
+    provider: BaseProvider,
+): Promise<[string, string]> {
     let fileContent = await fs.readFile(targetPath).then(res => res.toString());
     fileContent = provider.beforeExecute(fileContent, input);
 
@@ -21,9 +26,12 @@ export async function transpileAndRun(input: InputType, output: string, targetPa
     }
 
     const outputBuffer: string[] = [];
-    const handleConsoleMessage = (...data: any[]) => {
-        outputBuffer.push(data.map(item => provider.serializeOutput(item)).join(" "));
-    };
+    const debugBuffer: string[] = [];
+    const handleConsoleMessage =
+        (targetBuffer: string[]) =>
+        (...data: any[]) => {
+            targetBuffer.push(data.map(item => provider.serializeOutput(item)).join(" "));
+        };
 
     const inputData = Array.isArray(input) ? input.map(item => JSON.parse(item)) : input;
     const vm = new NodeVM({
@@ -39,10 +47,10 @@ export async function transpileAndRun(input: InputType, output: string, targetPa
         },
     });
 
-    vm.on("console.log", handleConsoleMessage);
-    vm.on("console.info", handleConsoleMessage);
-    vm.on("console.warn", handleConsoleMessage);
+    vm.on("console.log", handleConsoleMessage(outputBuffer));
+    vm.on("console.info", handleConsoleMessage(debugBuffer));
+    vm.on("console.warn", handleConsoleMessage(outputBuffer));
     vm.run(transpiledContent.code);
 
-    return outputBuffer.join("\n").replace(/\r\n/g, "\n");
+    return [outputBuffer.join("\n").replace(/\r\n/g, "\n"), debugBuffer.join("\n").replace(/\r\n/g, "\n")];
 }

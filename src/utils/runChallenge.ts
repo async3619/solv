@@ -32,9 +32,9 @@ async function runTestCase(
     provider: BaseProvider,
 ) {
     try {
-        const result = await transpileAndRun(input, output, targetPath, provider);
-        if (result !== output) {
-            throw new TestCaseFailedError(index, result);
+        const data = await transpileAndRun(input, output, targetPath, provider);
+        if (data[0] !== output) {
+            throw new TestCaseFailedError(index, data);
         }
     } catch (e) {
         if (e instanceof TestCaseFailedError) {
@@ -60,7 +60,7 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
     try {
         await instance.run();
     } catch (e) {
-        let result = "";
+        let result = [""];
         if (e instanceof TestCaseFailedError) {
             currentTestCaseIndex = e.testCaseIndex;
             result = e.result;
@@ -68,7 +68,7 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
             if ("stderr" in e) {
                 result = (e as any).stderr;
             } else {
-                result = e.message;
+                result = [e.message];
             }
         }
 
@@ -78,6 +78,10 @@ export async function runChallenge(challenge: Challenge, targetPath: string) {
         breakLine(2);
         renderSection("Input", input, chalk.cyan);
         renderSection("Output (expected)", output, chalk.green);
-        renderSection("Output", result, chalk.red);
+        renderSection("Output", result[0], chalk.red);
+
+        if (result.length > 1 && result[1]) {
+            renderSection("Debug", result[1], chalk.magenta);
+        }
     }
 }
