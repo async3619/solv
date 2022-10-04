@@ -2,6 +2,7 @@ import * as fs from "fs-extra";
 import * as esbuild from "esbuild";
 import { NodeVM } from "vm2";
 
+import logger from "../logger";
 import { InputType } from "../types";
 import { BaseProvider } from "../providers/base";
 
@@ -12,7 +13,7 @@ export async function transpileAndRun(
     output: string,
     targetPath: string,
     provider: BaseProvider,
-): Promise<[string, string]> {
+): Promise<[string, string] | Error> {
     let fileContent = await fs.readFile(targetPath).then(res => res.toString());
     fileContent = provider.beforeExecute(fileContent, input);
 
@@ -51,7 +52,17 @@ export async function transpileAndRun(
     vm.on("console.warn", handleConsoleMessage(outputBuffer));
     vm.on("console.error", handleConsoleMessage(outputBuffer));
     vm.on("console.debug", handleConsoleMessage(debugBuffer));
-    vm.run(transpiledContent.code);
+
+    try {
+        vm.run(transpiledContent.code);
+    } catch (e) {
+        if (!(e instanceof Error)) {
+            logger.error("fatal error: " + e);
+            process.exit();
+        }
+
+        return e;
+    }
 
     return [outputBuffer.join("\n").replace(/\r\n/g, "\n"), debugBuffer.join("\n").replace(/\r\n/g, "\n")];
 }

@@ -33,6 +33,10 @@ async function runTestCase(
 ) {
     try {
         const data = await transpileAndRun(input, output, targetPath, provider);
+        if (data instanceof Error) {
+            throw data;
+        }
+
         if (data[0] !== output) {
             throw new TestCaseFailedError(index, data);
         }
@@ -40,7 +44,7 @@ async function runTestCase(
         if (e instanceof TestCaseFailedError) {
             throw e;
         } else if (e instanceof Error) {
-            throw new TestCaseFailedError(index, (e as any).stderr || e.message, "Test case failed with an error");
+            throw new TestCaseFailedError(index, [(e as any).stderr || e.stack, ""], "Test case failed with an error");
         }
     }
 }
