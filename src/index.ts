@@ -15,7 +15,7 @@ import { Config } from "./types";
 import { truncate } from "./utils/truncate";
 import { runChallenge } from "./utils/runChallenge";
 
-async function main({ args, options: { source } }: ActionParameters) {
+async function main({ args, options: { source, config: configPath } }: ActionParameters) {
     try {
         clearConsole();
         drawLogo();
@@ -47,8 +47,12 @@ async function main({ args, options: { source } }: ActionParameters) {
         logger.info(`use following url: ${targetUrl}`);
         logger.info(`use following source code path: ${targetPath}`);
 
+        if (typeof configPath !== "string") {
+            configPath = false;
+        }
+
         let config: Config | null = null;
-        const configFilePath = path.join(process.cwd(), ".solv.yml");
+        const configFilePath = configPath || path.join(process.cwd(), ".solv.yml");
         if (fs.existsSync(configFilePath)) {
             logger.info(`use custom configuration file: ${configFilePath}`);
 
@@ -108,6 +112,9 @@ async function main({ args, options: { source } }: ActionParameters) {
 program
     .argument("<url>", "Specify a website url to solve")
     .option("--source, -s <path>", "Specify source code path to watch", {
+        required: false,
+    })
+    .option("--config, -c <path>", "Specify configuration file path", {
         required: false,
     })
     .action(main);
