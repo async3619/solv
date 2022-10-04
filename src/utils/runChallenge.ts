@@ -9,6 +9,7 @@ import { BaseProvider } from "../providers/base";
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
 import { serialize } from "./serialize";
+import { normalizeString } from "./normalizeString";
 
 function renderSection(title: string, content: InputType, chalkFunction: (target: string) => string) {
     let contentText: string | null;
@@ -58,12 +59,7 @@ async function runTestCase(
 export async function runChallenge(challenge: Challenge, targetPath: string, config: Config | null) {
     breakLine();
 
-    const items = challenge.input.map<InputOutput>((input, i) => ({
-        input,
-        output: challenge.output[i],
-    }));
-
-    const customCases: InputOutput[] = [];
+    const items: InputOutput[] = [];
     if (config) {
         const cases = config.cases
             .filter(
@@ -74,23 +70,26 @@ export async function runChallenge(challenge: Challenge, targetPath: string, con
             .map(p => p.items)
             .flat();
 
-        customCases.push(
+        items.push(
             ...cases.map<InputOutput>(({ input, output }) => ({
-                input,
-                output,
+                input: normalizeString(input),
+                output: normalizeString(output),
                 isCustom: true,
             })),
         );
     }
 
+    items.push(
+        ...challenge.input.map<InputOutput>((input, i) => ({
+            input,
+            output: challenge.output[i],
+        })),
+    );
+
     let currentTestCaseIndex = 0;
     const instance = new Listr([
-        ...customCases.map(({ input, output, isCustom }, index) => ({
-            title: `Running with custom test case #${index + 1}`,
-            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom),
-        })),
         ...items.map(({ input, output, isCustom }, index) => ({
-            title: `Running with test case #${index + 1}`,
+            title: `Running with ${isCustom ? "custom " : ""}test case #${index + 1}`,
             task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom),
         })),
     ]);
@@ -110,8 +109,7 @@ export async function runChallenge(challenge: Challenge, targetPath: string, con
             }
         }
 
-        const input = challenge.input[currentTestCaseIndex];
-        const output = challenge.output[currentTestCaseIndex];
+        const { input, output } = items[currentTestCaseIndex];
 
         breakLine(2);
         renderSection("Input", input, chalk.cyan);
