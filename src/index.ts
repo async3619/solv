@@ -15,7 +15,7 @@ import { Config } from "./types";
 import { truncate } from "./utils/truncate";
 import { runChallenge } from "./utils/runChallenge";
 
-async function main({ args, options: { source, config: configPath } }: ActionParameters) {
+async function main({ args, options: { source, config: configPath, n: noOverwrite } }: ActionParameters) {
     try {
         clearConsole();
         drawLogo();
@@ -61,16 +61,18 @@ async function main({ args, options: { source, config: configPath } }: ActionPar
         }
 
         if (fs.existsSync(targetPath)) {
-            const { overwrite } = await prompts({
-                type: "confirm",
-                name: "overwrite",
-                message: `Given source file '${targetPath}' seems already existing, overwrite it?`,
-                initial: true,
-            });
+            if (!noOverwrite) {
+                const { overwrite } = await prompts({
+                    type: "confirm",
+                    name: "overwrite",
+                    message: `Given source file '${targetPath}' seems already existing, overwrite it?`,
+                    initial: true,
+                });
 
-            if (overwrite) {
-                await fs.unlink(targetPath);
-                await fs.writeFile(targetPath, challenge.initialCode || "");
+                if (overwrite) {
+                    await fs.unlink(targetPath);
+                    await fs.writeFile(targetPath, challenge.initialCode || "");
+                }
             }
         } else {
             await fs.writeFile(targetPath, challenge.initialCode || "");
@@ -115,6 +117,9 @@ program
         required: false,
     })
     .option("--config, -c <path>", "Specify configuration file path", {
+        required: false,
+    })
+    .option("--no-overwrite, -n", "Specify if program should not overwrite source code file", {
         required: false,
     })
     .action(main);
