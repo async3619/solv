@@ -48,8 +48,9 @@ export async function transpileAndRun(
     });
 
     vm.on("console.log", handleConsoleMessage(outputBuffer));
-    vm.on("console.info", handleConsoleMessage(debugBuffer));
     vm.on("console.warn", handleConsoleMessage(outputBuffer));
+    vm.on("console.error", handleConsoleMessage(outputBuffer));
+    vm.on("console.debug", handleConsoleMessage(debugBuffer));
     vm.run(transpiledContent.code);
 
     return [outputBuffer.join("\n").replace(/\r\n/g, "\n"), debugBuffer.join("\n").replace(/\r\n/g, "\n")];
