@@ -56,7 +56,7 @@ async function main({ args, options: { source, config: configPath, n: noOverwrit
         if (fs.existsSync(configFilePath)) {
             logger.info(`use custom configuration file: ${configFilePath}`);
 
-            const configData = await fs.readFile(path.join(process.cwd(), ".solv.yml")).then(res => res.toString());
+            const configData = await fs.readFile(configFilePath).then(res => res.toString());
             config = yaml.parse(configData);
         }
 
