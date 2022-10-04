@@ -2,7 +2,7 @@ import * as Listr from "listr";
 import * as chalk from "chalk";
 
 import { breakLine, drawLine } from "../cli";
-import { Challenge, InputType } from "../types";
+import { Challenge, Config, InputOutput, InputType } from "../types";
 
 import { BaseProvider } from "../providers/base";
 
@@ -30,6 +30,7 @@ async function runTestCase(
     output: string,
     targetPath: string,
     provider: BaseProvider,
+    isCustom = false,
 ) {
     try {
         const data = await transpileAndRun(input, output, targetPath, provider);
@@ -38,28 +39,61 @@ async function runTestCase(
         }
 
         if (data[0] !== output) {
-            throw new TestCaseFailedError(index, data);
+            throw new TestCaseFailedError(index, data, undefined, isCustom);
         }
     } catch (e) {
         if (e instanceof TestCaseFailedError) {
             throw e;
         } else if (e instanceof Error) {
-            throw new TestCaseFailedError(index, [(e as any).stderr || e.stack, ""], "Test case failed with an error");
+            throw new TestCaseFailedError(
+                index,
+                [(e as any).stderr || e.stack, ""],
+                "Test case failed with an error",
+                isCustom,
+            );
         }
     }
 }
 
-export async function runChallenge(challenge: Challenge, targetPath: string) {
+export async function runChallenge(challenge: Challenge, targetPath: string, config: Config | null) {
     breakLine();
 
+    const items = challenge.input.map<InputOutput>((input, i) => ({
+        input,
+        output: challenge.output[i],
+    }));
+
+    const customCases: InputOutput[] = [];
+    if (config) {
+        const cases = config.cases
+            .filter(
+                ({ id, provider }) =>
+                    id.toString() === challenge.id.toString() &&
+                    challenge.provider.getName().toLowerCase() === provider,
+            )
+            .map(p => p.items)
+            .flat();
+
+        customCases.push(
+            ...cases.map<InputOutput>(({ input, output }) => ({
+                input,
+                output,
+                isCustom: true,
+            })),
+        );
+    }
+
     let currentTestCaseIndex = 0;
-    const instance = new Listr(
-        challenge.input.map((_, index) => ({
-            title: `Running with test case #${index + 1}`,
-            task: () =>
-                runTestCase(index, challenge.input[index], challenge.output[index], targetPath, challenge.provider),
+    const instance = new Listr([
+        ...customCases.map(({ input, output, isCustom }, index) => ({
+            title: `Running with custom test case #${index + 1}`,
+            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom),
         })),
-    );
+        ...items.map(({ input, output, isCustom }, index) => ({
+            title: `Running with test case #${index + 1}`,
+            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom),
+        })),
+    ]);
 
     try {
         await instance.run();

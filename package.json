@@ -1,6 +1,6 @@
 {
     "name": "solv-cli",
-    "version": "1.1.2",
+    "version": "1.1.1",
     "license": "MIT",
     "publishConfig": {
         "access": "public"
@@ -58,6 +58,7 @@
         "prompts": "^2.4.2",
         "replace-ext": "^2.0.0",
         "uuid": "^9.0.0",
-        "vm2": "^3.9.11"
+        "vm2": "^3.9.11",
+        "yaml": "^2.1.2"
     }
 }

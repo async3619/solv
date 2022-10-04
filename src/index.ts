@@ -3,12 +3,14 @@ import * as path from "path";
 import * as fs from "fs-extra";
 import * as chokidar from "chokidar";
 import * as prompts from "prompts";
+import * as yaml from "yaml";
 
 import { program, ActionParameters } from "@caporal/core";
 
 import { TARGET_PROVIDERS } from "./providers";
 import { breakLine, clearConsole, drawLine, drawLogo } from "./cli";
 import logger from "./logger";
+import { Config } from "./types";
 
 import { truncate } from "./utils/truncate";
 import { runChallenge } from "./utils/runChallenge";
@@ -45,6 +47,15 @@ async function main({ args, options: { source } }: ActionParameters) {
         logger.info(`use following url: ${targetUrl}`);
         logger.info(`use following source code path: ${targetPath}`);
 
+        let config: Config | null = null;
+        const configFilePath = path.join(process.cwd(), ".solv.yml");
+        if (fs.existsSync(configFilePath)) {
+            logger.info(`use custom configuration file: ${configFilePath}`);
+
+            const configData = await fs.readFile(path.join(process.cwd(), ".solv.yml")).then(res => res.toString());
+            config = yaml.parse(configData);
+        }
+
         if (fs.existsSync(targetPath)) {
             const { overwrite } = await prompts({
                 type: "confirm",
@@ -70,7 +81,7 @@ async function main({ args, options: { source } }: ActionParameters) {
         logger.info(` - for more information, you can visit: ${targetUrl}`);
         logger.info(`now start watching changes of '${targetPath}' ...`);
 
-        await runChallenge(challenge, targetPath);
+        await runChallenge(challenge, targetPath, config);
         const watcher = chokidar.watch(targetPath);
 
         watcher
@@ -78,7 +89,7 @@ async function main({ args, options: { source } }: ActionParameters) {
                 clearConsole();
                 logger.info("File change detected, now trying to transpile and execute:");
 
-                runChallenge(challenge, targetPath).then();
+                runChallenge(challenge, targetPath, config).then();
             })
             .on("delete", () => {
                 logger.error(`'${targetPath}' seems to be deleted.`);

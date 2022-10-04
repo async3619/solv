@@ -14,3 +14,19 @@ export interface Challenge {
     provider: BaseProvider;
     initialCode?: string;
 }
+
+export interface InputOutput {
+    isCustom?: boolean;
+    input: InputType;
+    output: string;
+}
+
+interface ConfigCaseItem {
+    provider: string;
+    id: number | string;
+    items: InputOutput[];
+}
+
+export interface Config {
+    cases: ConfigCaseItem[];
+}
