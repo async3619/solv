@@ -1,4 +1,5 @@
 import * as chalk from "chalk";
+import { version } from "../package.json";
 
 export function clearConsole() {
     process.stdout.write("\x1Bc");
@@ -9,7 +10,7 @@ export function drawLogo() {
    _________  / /   __
   / ___/ __ \\/ / | / /
  (__  ) /_/ / /| |/ / 
-/____/\\____/_/ |___/ ${chalk.italic.white("v0.1.0")}`;
+/____/\\____/_/ |___/ ${chalk.italic.white(`v${version}`)}`;
 
     console.log(chalk.cyan(ASCII_LOGO));
 }

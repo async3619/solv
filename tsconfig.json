@@ -10,6 +10,7 @@
         "allowSyntheticDefaultImports": true,
         "target": "es2017",
         "sourceMap": false,
+        "resolveJsonModule": true,
         "outDir": "./dist",
         "baseUrl": ".",
         "incremental": true,
