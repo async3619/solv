@@ -81,6 +81,14 @@ describe("runChallenge", () => {
         return buffer;
     };
 
+    const trimOutput = (output: string[]) => {
+        return output
+            .join("\n")
+            .replace(/\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]/g, "")
+            .replace(/\[31m {4}at .*\[39m/g, "")
+            .trim();
+    };
+
     it("should runs given challenge properly", async () => {
         const buffer: string[] = installHook(SAMPLE_CODE);
         await runChallenge(
@@ -95,7 +103,7 @@ describe("runChallenge", () => {
             null,
         );
 
-        expect(buffer.join("\n").replace(/\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]/g, "")).toMatchSnapshot();
+        expect(trimOutput(buffer)).toMatchSnapshot();
     });
 
     it("should shows error message whenever test case throws an error", async () => {
@@ -112,7 +120,7 @@ describe("runChallenge", () => {
             null,
         );
 
-        expect(buffer.join("\n").replace(/\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]/g, "")).toMatchSnapshot();
+        expect(trimOutput(buffer)).toMatchSnapshot();
     });
 
     it("should shows debug message whenever test case leave debugging log", async () => {
@@ -129,7 +137,7 @@ describe("runChallenge", () => {
             null,
         );
 
-        expect(buffer.join("\n").replace(/\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]/g, "")).toMatchSnapshot();
+        expect(trimOutput(buffer)).toMatchSnapshot();
     });
 
     it("should runs custom test case only when its given", async () => {
@@ -159,6 +167,6 @@ describe("runChallenge", () => {
             },
         );
 
-        expect(buffer.join("\n").replace(/\[[0-9]{2}:[0-9]{2}:[0-9]{2}\]/g, "")).toMatchSnapshot();
+        expect(trimOutput(buffer)).toMatchSnapshot();
     });
 });
