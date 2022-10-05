@@ -4,7 +4,7 @@ import { Command } from "commander";
 import { serialize } from "./serialize";
 import { InputType } from "./types";
 
-import { version, description, name } from "../../package.json";
+import { version, description } from "../../package.json";
 
 export function clearConsole() {
     process.stdout.write("\x1Bc");
