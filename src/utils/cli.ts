@@ -1,6 +1,9 @@
 import * as chalk from "chalk";
 import { Command } from "commander";
 
+import { serialize } from "./serialize";
+import { InputType } from "./types";
+
 import { version, description, name } from "../../package.json";
 
 export function clearConsole() {
@@ -47,4 +50,21 @@ export async function parseCommandLine(argv: string[]) {
         noOverwrite,
         targetUrl,
     };
+}
+
+export function renderSection(title: string, content: InputType, chalkFunction?: (target: string) => string) {
+    let contentText: string | null;
+    if (Array.isArray(content)) {
+        contentText = content.map(item => serialize(JSON.parse(item))).join(" ");
+    } else {
+        contentText = content;
+    }
+
+    console.info(title);
+    drawLine(15);
+
+    const actualContent = contentText || chalk.italic("(empty)");
+    console.info(chalkFunction ? chalkFunction(actualContent) : actualContent);
+
+    breakLine();
 }

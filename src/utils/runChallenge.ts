@@ -5,27 +5,12 @@ import { Challenge, Config, InputOutput, InputType } from "./types";
 
 import { BaseProvider } from "../providers/base";
 
-import { breakLine, drawLine } from "./cli";
+import { breakLine, renderSection } from "./cli";
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
-import { serialize } from "./serialize";
 import { normalizeString } from "./normalizeString";
 
-function renderSection(title: string, content: InputType, chalkFunction: (target: string) => string) {
-    let contentText: string | null;
-    if (Array.isArray(content)) {
-        contentText = content.map(item => serialize(JSON.parse(item))).join(" ");
-    } else {
-        contentText = content;
-    }
-
-    console.info(title);
-    drawLine(15);
-    console.info(chalkFunction(contentText || chalk.italic("(empty)")));
-    breakLine();
-}
-
-async function runTestCase(
+export async function runTestCase(
     index: number,
     input: InputType,
     output: string,
@@ -101,12 +86,6 @@ export async function runChallenge(challenge: Challenge, targetPath: string, con
         if (e instanceof TestCaseFailedError) {
             currentTestCaseIndex = e.testCaseIndex;
             result = e.result;
-        } else if (e instanceof Error) {
-            if ("stderr" in e) {
-                result = (e as any).stderr;
-            } else {
-                result = [e.message];
-            }
         }
 
         const { input, output } = items[currentTestCaseIndex];
