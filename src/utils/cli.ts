@@ -32,7 +32,7 @@ export function drawLine(length: number, char = "=") {
 
 export async function parseCommandLine(argv: string[]) {
     const program = await new Command()
-        .name(name)
+        .name("solv")
         .description(description)
         .version(version)
         .argument("<url>", "Specify a website url to solve")
