@@ -1,7 +1,12 @@
 import * as moment from "moment";
+import * as chalk from "chalk";
 import logger from "./logger";
 
 describe("logger", () => {
+    beforeEach(() => {
+        (chalk.level as any) = 3;
+    });
+
     it("should leaves a log depending on levels properly", async () => {
         const buffers: any[] = [];
         console.info = (...data: any[]) => buffers.push(...data);
