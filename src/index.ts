@@ -5,17 +5,17 @@ import * as chokidar from "chokidar";
 import * as prompts from "prompts";
 import * as yaml from "yaml";
 
-import { program, ActionParameters } from "@caporal/core";
-
 import { TARGET_PROVIDERS } from "./providers";
-import { breakLine, clearConsole, drawLine, drawLogo } from "./cli";
-import logger from "./logger";
-import { Config } from "./types";
 
-import { truncate } from "./utils/truncate";
+import { breakLine, clearConsole, drawLine, drawLogo, parseCommandLine } from "./utils/cli";
 import { runChallenge } from "./utils/runChallenge";
+import { truncate } from "./utils/truncate";
+import { Config } from "./utils/types";
+import logger from "./utils/logger";
 
-async function main({ args, options: { source, config: configPath, n: noOverwrite } }: ActionParameters) {
+async function main() {
+    const { targetUrl, configPath, noOverwrite, source } = await parseCommandLine();
+
     try {
         clearConsole();
         drawLogo();
@@ -23,7 +23,6 @@ async function main({ args, options: { source, config: configPath, n: noOverwrit
         drawLine(35);
         breakLine();
 
-        const targetUrl = args.url as string;
         const provider = TARGET_PROVIDERS.find(provider => provider.checkUrl(targetUrl));
         if (!provider) {
             logger.warn("there was no matched coding challenge service on records. abort.");
@@ -46,10 +45,6 @@ async function main({ args, options: { source, config: configPath, n: noOverwrit
 
         logger.info(`use following url: ${targetUrl}`);
         logger.info(`use following source code path: ${targetPath}`);
-
-        if (typeof configPath !== "string") {
-            configPath = false;
-        }
 
         let config: Config | null = null;
         const configFilePath = configPath || path.join(process.cwd(), ".solv.yml");
@@ -107,21 +102,10 @@ async function main({ args, options: { source, config: configPath, n: noOverwrit
         }
 
         logger.error(e.message);
-        console.error(e.stack);
+        if (e.stack) {
+            console.error(e.stack.split("\n").slice(1).join("\n"));
+        }
     }
 }
 
-program
-    .argument("<url>", "Specify a website url to solve")
-    .option("--source, -s <path>", "Specify source code path to watch", {
-        required: false,
-    })
-    .option("--config, -c <path>", "Specify configuration file path", {
-        required: false,
-    })
-    .option("--no-overwrite, -n", "Specify if program should not overwrite source code file", {
-        required: false,
-    })
-    .action(main);
-
-program.run().then();
+main();

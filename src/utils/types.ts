@@ -1,4 +1,4 @@
-import { BaseProvider } from "./providers/base";
+import { BaseProvider } from "src/providers/base";
 
 export type InputType = string[] | string;
 

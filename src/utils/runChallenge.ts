@@ -1,11 +1,11 @@
 import * as Listr from "listr";
 import * as chalk from "chalk";
 
-import { breakLine, drawLine } from "../cli";
-import { Challenge, Config, InputOutput, InputType } from "../types";
+import { Challenge, Config, InputOutput, InputType } from "./types";
 
 import { BaseProvider } from "../providers/base";
 
+import { breakLine, drawLine } from "./cli";
 import { TestCaseFailedError } from "./TestCaseFailedError";
 import { transpileAndRun } from "./transpileAndRun";
 import { serialize } from "./serialize";

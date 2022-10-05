@@ -1,4 +1,4 @@
-import { InputType } from "../types";
+import { InputType } from "./types";
 
 export function normalizeString(input: string): string;
 export function normalizeString(input: string[]): string[];

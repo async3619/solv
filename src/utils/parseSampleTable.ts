@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { HTMLElement, Node, NodeType } from "node-html-parser";
 import { decode } from "html-entities";
 
-import { Challenge } from "../types";
+import { Challenge } from "./types";
 
 function getAllChildren(element: Node, tagName: string, depth = 0) {
     const result: Node[] = [element];

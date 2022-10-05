@@ -1,8 +1,9 @@
 import { parse as parseDOM } from "node-html-parser";
 import { decode } from "html-entities";
 
+import { Challenge } from "../utils/types";
+
 import { BaseProvider } from "./base";
-import { Challenge } from "../types";
 
 export class BaekjoonProvider extends BaseProvider {
     private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/[1-9]([0-9]*)$/;

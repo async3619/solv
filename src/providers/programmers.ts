@@ -4,8 +4,7 @@ import { BaseProvider } from "./base";
 
 import { findSiblingElement } from "../utils/findSiblingElement";
 import { parseSampleTable } from "../utils/parseSampleTable";
-
-import { Challenge } from "../types";
+import { Challenge } from "../utils/types";
 
 export class ProgrammersProvider extends BaseProvider {
     public constructor() {

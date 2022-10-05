@@ -2,9 +2,10 @@ import * as fs from "fs-extra";
 import * as esbuild from "esbuild";
 import { NodeVM } from "vm2";
 
-import logger from "../logger";
-import { InputType } from "../types";
 import { BaseProvider } from "../providers/base";
+
+import logger from "./logger";
+import { InputType } from "./types";
 
 const replaceExt = require("replace-ext");
 

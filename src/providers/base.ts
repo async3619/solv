@@ -1,5 +1,6 @@
-import { Challenge, InputType } from "../types";
 import fetch from "node-fetch";
+
+import { Challenge, InputType } from "../utils/types";
 
 export abstract class BaseProvider {
     public abstract checkUrl(url: string): boolean;

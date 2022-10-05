@@ -1,5 +1,6 @@
 {
     "name": "solv-cli",
+    "description": "Hot-challenge-solving application for any coding challenge services",
     "version": "1.2.2",
     "license": "MIT",
     "publishConfig": {
@@ -52,8 +53,8 @@
         "typescript": "^4.8.3"
     },
     "dependencies": {
-        "@caporal/core": "^2.0.2",
         "chalk": "^4.1.2",
+        "commander": "^9.4.1",
         "esbuild": "^0.15.9",
         "fs-extra": "^10.1.0",
         "html-entities": "^2.3.3",
