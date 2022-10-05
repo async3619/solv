@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseSampleTable should parse sample table successfully 1`] = `
+{
+  "input": [
+    [
+      "[[0, 1, 4, 4], [3, 1, 5, 3]]",
+    ],
+    [
+      "[[1, 1, 6, 5], [2, 0, 4, 2], [2, 4, 5, 7], [4, 3, 8, 6], [7, 5, 9, 7]]",
+    ],
+  ],
+  "output": [
+    "14",
+    "38",
+  ],
+}
+`;

@@ -27,16 +27,16 @@ export function drawLine(length: number, char = "=") {
     console.log(new Array(length).fill(char).join(""));
 }
 
-export async function parseCommandLine() {
+export async function parseCommandLine(argv: string[]) {
     const program = await new Command()
         .name(name)
         .description(description)
         .version(version)
         .argument("<url>", "Specify a website url to solve")
-        .option("--source, -s <path>", "Specify source code path to watch")
-        .option("--config, -c <path>", "Specify configuration file path")
+        .option("--source, -s <source>", "Specify source code path to watch")
+        .option("--config, -c <config>", "Specify configuration file path")
         .option("--no-overwrite, -n", "Specify if program should not overwrite source code file")
-        .parseAsync();
+        .parseAsync(argv);
 
     const { S: source, C: configPath, N: noOverwrite } = program.opts();
     const [targetUrl] = program.args;

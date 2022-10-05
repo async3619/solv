@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transpileAndRun should catches error 1`] = `[Error: Test error]`;
+
+exports[`transpileAndRun should pass given input data to code context 1`] = `
+[
+  "["Test"]",
+  "",
+]
+`;

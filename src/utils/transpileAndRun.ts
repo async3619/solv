@@ -4,7 +4,6 @@ import { NodeVM } from "vm2";
 
 import { BaseProvider } from "../providers/base";
 
-import logger from "./logger";
 import { InputType } from "./types";
 
 const replaceExt = require("replace-ext");
@@ -57,12 +56,7 @@ export async function transpileAndRun(
     try {
         vm.run(transpiledContent.code);
     } catch (e) {
-        if (!(e instanceof Error)) {
-            logger.error("fatal error: " + e);
-            process.exit();
-        }
-
-        return e;
+        return e as Error;
     }
 
     return [outputBuffer.join("\n").replace(/\r\n/g, "\n"), debugBuffer.join("\n").replace(/\r\n/g, "\n")];

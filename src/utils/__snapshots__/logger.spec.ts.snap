@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`logger should leaves a log depending on levels properly 1`] = `
+[
+  "[34m[info][39m[32m[00:00:00.000][39m Test",
+  "[31m[error][39m[32m[00:00:00.000][39m Test",
+  "[33m[warn][39m[32m[00:00:00.000][39m Test",
+]
+`;
