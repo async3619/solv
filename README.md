@@ -10,6 +10,7 @@
 </h1>
 
 <div align="center">
+  <img src="https://img.shields.io/codecov/c/github/async3619/solv/dev?style=flat-square&token=9UAM0GA4VI" alt="codecov" />
   <img src="https://img.shields.io/github/license/async3619/solv.svg?style=flat-square" alt="MIT License" />
   <br />
   <sup>Hot-challenge-solving application for any coding challenge services.</sup>
