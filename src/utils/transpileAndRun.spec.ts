@@ -42,6 +42,7 @@ function foo(input: string[]) {
 
 foo([]);
         `);
+        (fs.writeFile as any) = () => Promise.resolve();
 
         const result = await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toStrictEqual(["Hello World!", "Debug message."]);
@@ -50,6 +51,7 @@ foo([]);
     it("should pass given input data to code context", async () => {
         jest.mock("fs-extra");
         (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
+        (fs.writeFile as any) = () => Promise.resolve();
 
         expect(await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider())).toMatchSnapshot();
     });
@@ -57,6 +59,7 @@ foo([]);
     it("should pass JSON serialized input data", async () => {
         jest.mock("fs-extra");
         (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
+        (fs.writeFile as any) = () => Promise.resolve();
 
         expect(
             await transpileAndRun([`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
@@ -66,6 +69,7 @@ foo([]);
     it("should catches error", async () => {
         jest.mock("fs-extra");
         (fs.readFile as any) = () => Promise.resolve(`throw new Error("Test error")`);
+        (fs.writeFile as any) = () => Promise.resolve();
 
         const result = await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toMatchSnapshot();
