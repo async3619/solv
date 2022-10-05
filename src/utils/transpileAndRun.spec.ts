@@ -3,6 +3,33 @@ import * as fs from "fs-extra";
 import { BaekjoonProvider } from "../providers/baekjoon";
 import { transpileAndRun } from "./transpileAndRun";
 
+const SAMPLE_CODE = `
+function solution(input: string[]) {
+    console.log(input);
+}
+
+(callback => {
+    if (typeof process !== "undefined" && "env" in process && "arguments" in process.env && process.env.arguments) {
+        solution(process.env.arguments);
+        return;
+    }
+
+    const readline = require("readline");
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    const input: string[] = [];
+    rl.on("line", line => {
+        input.push(line);
+    }).on("close", function () {
+        callback(input);
+        process.exit();
+    });
+})(solution);
+`.trim();
+
 describe("transpileAndRun", () => {
     it("should transpiles and runs given code properly", async () => {
         jest.mock("fs-extra");
@@ -22,35 +49,18 @@ foo([]);
 
     it("should pass given input data to code context", async () => {
         jest.mock("fs-extra");
-        (fs.readFile as any) = () =>
-            Promise.resolve(`
-function solution(input: string[]) {
-    console.log(input);
-}
-
-(callback => {
-    if (typeof process !== "undefined" && "env" in process && "arguments" in process.env && process.env.arguments) {
-        solution(process.env.arguments.split("\\n"));
-        return;
-    }
-
-    const readline = require("readline");
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    const input: string[] = [];
-    rl.on("line", line => {
-        input.push(line);
-    }).on("close", function () {
-        callback(input);
-        process.exit();
-    });
-})(solution);
-        `);
+        (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
 
         expect(await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider())).toMatchSnapshot();
+    });
+
+    it("should pass JSON serialized input data", async () => {
+        jest.mock("fs-extra");
+        (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
+
+        expect(
+            await transpileAndRun([`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
+        ).toMatchSnapshot();
     });
 
     it("should catches error", async () => {
