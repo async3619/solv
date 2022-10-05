@@ -48,7 +48,7 @@ export class ProgrammersProvider extends BaseProvider {
 
         const ioSampleTable = findSiblingElement(ioSampleHeaderDOM, node => node.tagName === "TABLE");
         if (!ioSampleTable) {
-            throw new Error("Failed to parse challenge input / output samples.");
+            throw new Error("Failed to find challenge output sample table.");
         }
 
         const initialCode = document
