@@ -41,7 +41,7 @@ export class BaekjoonProvider extends BaseProvider {
             throw new Error("Failed to parse challenge information.");
         }
 
-        const id = targetUrl.pathname.split("/").at(-1);
+        const id = targetUrl.pathname.split("/").slice(-1)[0];
         if (!id) {
             throw new Error("Failed to retrieve challenge id.");
         }
