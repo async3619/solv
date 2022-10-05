@@ -1,4 +1,6 @@
-import { parseCommandLine, drawLine, drawLogo, breakLine, clearConsole } from "./cli";
+import * as chalk from "chalk";
+
+import { parseCommandLine, drawLine, drawLogo, breakLine, clearConsole, renderSection } from "./cli";
 
 describe("parseCommandLine", () => {
     it("should parse command line options properly", async () => {
@@ -83,5 +85,43 @@ describe("clearConsole", function () {
 
         clearConsole();
         expect(data).toBe("\x1Bc");
+    });
+});
+
+describe("renderSection", () => {
+    it("should renders a section with string value", () => {
+        const buffer: string[] = [];
+        console.info = (content: string) => buffer.push(content);
+
+        renderSection("Title", "Content");
+
+        expect(buffer.join("\n")).toMatchSnapshot();
+    });
+
+    it("should renders a section with string array", () => {
+        const buffer: string[] = [];
+        console.info = (content: string) => buffer.push(content);
+
+        renderSection("Title", ['"Content1"', '["Content2"]']);
+
+        expect(buffer.join("\n")).toMatchSnapshot();
+    });
+
+    it("should renders a section with given chalk function", () => {
+        const buffer: string[] = [];
+        console.info = (content: string) => buffer.push(content);
+
+        renderSection("Title", "Content", chalk.cyan);
+
+        expect(buffer.join("\n")).toMatchSnapshot();
+    });
+
+    it("should renders a section with no data", () => {
+        const buffer: string[] = [];
+        console.info = (content: string) => buffer.push(content);
+
+        renderSection("Title", "");
+
+        expect(buffer.join("\n")).toMatchSnapshot();
     });
 });

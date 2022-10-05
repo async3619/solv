@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`runChallenge should runs custom test case only when its given 1`] = `
+"
+[2m[22m Running with custom test case #1 [started]
+[2m[22m Running with custom test case #1 [failed]
+[2m[22m → Output was not matched with custom test case #1
+
+
+Input
+===============
+[36mTest[39m
+
+Output (expected)
+===============
+[32mOutput[39m
+
+Output
+===============
+[31mTest[39m
+"
+`;
+
+exports[`runChallenge should runs given challenge properly 1`] = `
+"
+[2m[22m Running with test case #1 [started]
+[2m[22m Running with test case #1 [failed]
+[2m[22m → Output was not matched with test case #1
+
+
+Input
+===============
+[36mTest[39m
+
+Output (expected)
+===============
+[32mOutput[39m
+
+Output
+===============
+[31mTest[39m
+"
+`;
+
+exports[`runChallenge should shows debug message whenever test case leave debugging log 1`] = `
+"
+[2m[22m Running with test case #1 [started]
+[2m[22m Running with test case #1 [failed]
+[2m[22m → Output was not matched with test case #1
+
+
+Input
+===============
+[36mTest[39m
+
+Output (expected)
+===============
+[32mOutput[39m
+
+Output
+===============
+[31m[3m(empty)[23m[39m
+
+Debug
+===============
+[35mTest Log[39m
+"
+`;
+
+exports[`runChallenge should shows error message whenever test case throws an error 1`] = `
+"
+[2m[22m Running with test case #1 [started]
+[2m[22m Running with test case #1 [failed]
+[2m[22m → Test case failed with an error
+
+
+Input
+===============
+[36mTest[39m
+
+Output (expected)
+===============
+[32mOutput[39m
+
+Output
+===============
+[31mError: Test Error.[39m
+[31m    at vm.js:1:7[39m
+[31m    at VM2 Wrapper.apply (C:\\Users\\async\\WebstormProjects\\solv\\node_modules\\vm2\\lib\\bridge.js:485:11)[39m
+[31m    at NodeVM.run (C:\\Users\\async\\WebstormProjects\\solv\\node_modules\\vm2\\lib\\nodevm.js:426:23)[39m
+[31m    at run (C:\\Users\\async\\WebstormProjects\\solv\\src\\utils\\transpileAndRun.ts:57:12)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:96:5)[39m
+[31m    at runTestCase (C:\\Users\\async\\WebstormProjects\\solv\\src\\utils\\runChallenge.ts:22:22)[39m
+"
+`;

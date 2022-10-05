@@ -5,7 +5,14 @@ const config: JestConfigWithTsJest = {
     testEnvironment: "node",
     collectCoverage: true,
     coverageReporters: ["html", "json", "text"],
-    collectCoverageFrom: ["src/**/*.ts", "!src/index.ts", "!**/node_modules/**", "!**/dist/**", "!**/bin/**"],
+    collectCoverageFrom: [
+        "!**/*.js",
+        "src/**/*.ts",
+        "!src/index.ts",
+        "!**/node_modules/**",
+        "!**/dist/**",
+        "!**/bin/**",
+    ],
     modulePathIgnorePatterns: ["<rootDir>/dist/"],
     testPathIgnorePatterns: ["<rootDir>/dist/"],
 };

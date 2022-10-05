@@ -7,3 +7,23 @@ exports[`drawLogo should draws a logo properly 1`] = `
 [36m (__  ) /_/ / /| |/ / [39m
 [36m/____/\\____/_/ |___/ [3m[37mv1.2.2[39m[36m[23m[39m"
 `;
+
+exports[`renderSection should renders a section with given chalk function 1`] = `
+"Title
+[36mContent[39m"
+`;
+
+exports[`renderSection should renders a section with no data 1`] = `
+"Title
+[3m(empty)[23m"
+`;
+
+exports[`renderSection should renders a section with string array 1`] = `
+"Title
+Content1 [ 'Content2' ]"
+`;
+
+exports[`renderSection should renders a section with string value 1`] = `
+"Title
+Content"
+`;
