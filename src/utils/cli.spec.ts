@@ -2,6 +2,8 @@ import * as chalk from "chalk";
 
 import { parseCommandLine, drawLine, drawLogo, breakLine, clearConsole, renderSection } from "./cli";
 
+import { version } from "../../package.json";
+
 describe("parseCommandLine", () => {
     it("should parse command line options properly", async () => {
         const data = await parseCommandLine([
@@ -70,7 +72,7 @@ describe("breakLine", function () {
 describe("drawLogo", () => {
     it("should draws a logo properly", function () {
         const buffer: string[] = [];
-        console.log = (content: string) => buffer.push(content);
+        console.log = (content?: string) => buffer.push(content?.replace(version, "0.0.0") || "");
 
         drawLogo();
 

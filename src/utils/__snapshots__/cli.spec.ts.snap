@@ -5,7 +5,7 @@ exports[`drawLogo should draws a logo properly 1`] = `
 [36m   _________  / /   __[39m
 [36m  / ___/ __ \\/ / | / /[39m
 [36m (__  ) /_/ / /| |/ / [39m
-[36m/____/\\____/_/ |___/ [3m[37mv1.2.2[39m[36m[23m[39m"
+[36m/____/\\____/_/ |___/ [3m[37mv0.0.0[39m[36m[23m[39m"
 `;
 
 exports[`renderSection should renders a section with given chalk function 1`] = `
