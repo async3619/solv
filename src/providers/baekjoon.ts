@@ -5,7 +5,7 @@ import { BaseProvider } from "./base";
 import { Challenge } from "../types";
 
 export class BaekjoonProvider extends BaseProvider {
-    private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/([0-9]*?)$/;
+    private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/[1-9]([0-9]*)$/;
 
     public constructor() {
         super(true);

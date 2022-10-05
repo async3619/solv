@@ -13,7 +13,9 @@ export class ProgrammersProvider extends BaseProvider {
     }
 
     public checkUrl(url: string): boolean {
-        return /(https?:\/\/)?(school\.)?programmers\.co\.kr\/learn\/courses\/([0-9]*?)\/lessons\/([0-9]*?)$/.test(url);
+        return /(https?:\/\/)?(school\.)?programmers\.co\.kr\/learn\/courses\/([0-9]*?)\/lessons\/[0-9]([0-9]*?)$/.test(
+            url,
+        );
     }
 
     public serializeOutput(outputItem: any): string {
