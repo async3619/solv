@@ -32,7 +32,7 @@ $ npm install -g solv-cli
 ## Usage
 
 ```bash
-Usage: solv-cli [options] <url>
+Usage: solv [options] <url>
 
 hot-challenge-solving application for any coding challenge services
 
