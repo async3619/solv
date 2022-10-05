@@ -6,3 +6,4 @@
 /baekjoon_*.ts
 /baekjoon_*.js
 /.solv.yml
+/coverage

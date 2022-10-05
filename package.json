@@ -10,7 +10,9 @@
         "dev": "nodemon",
         "semantic-release": "semantic-release",
         "lint": "eslint \"src/**/*.ts\"",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run build",
+        "test": "jest",
+        "test:watch": "jest --watch"
     },
     "bin": {
         "solv": "./bin/solv.cjs"
@@ -28,6 +30,7 @@
         "@semantic-release/npm": "^9.0.1",
         "@semantic-release/release-notes-generator": "^10.0.3",
         "@types/fs-extra": "^9.0.13",
+        "@types/jest": "^29.1.1",
         "@types/listr": "^0.14.4",
         "@types/node": "^18.6.4",
         "@types/node-fetch": "^2.6.2",
@@ -39,10 +42,13 @@
         "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",
+        "jest": "^29.1.2",
         "nodemon": "^2.0.20",
         "prettier": "^2.7.1",
         "rimraf": "^3.0.2",
         "semantic-release": "^19.0.5",
+        "ts-jest": "^29.0.3",
+        "ts-node": "^10.9.1",
         "typescript": "^4.8.3"
     },
     "dependencies": {
