@@ -32,5 +32,17 @@ $ npm install -g solv-cli
 ## Usage
 
 ```bash
-$ solv <path> <url>
+Usage: solv-cli [options] <url>
+
+hot-challenge-solving application for any coding challenge services
+
+Arguments:
+  url                    Specify a website url to solve
+
+Options:
+  -V, --version          output the version number
+  --source, -s <source>  Specify source code path to watch
+  --config, -c <config>  Specify configuration file path
+  --no-overwrite, -n     Specify if program should not overwrite source code file
+  -h, --help             display help for command
 ```
