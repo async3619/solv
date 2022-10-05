@@ -29,6 +29,14 @@
 
 Solv [sɑːlv] is a cli application for solving coding challenges with live updaing feature.
 
+### Compatibility
+
+| Name                                           | Support?            |
+|------------------------------------------------|---------------------|
+| [Baekjoon (acmicpc)](https://www.acmicpc.net/) | ✅                   |
+| [Programmers](https://programmers.co.kr/)      | ⚠️ (Partially, WIP) |
+| [LeetCode](https://leetcode.com/)              | ❌                   |
+
 ## Installation
 
 ```bash
