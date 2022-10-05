@@ -1,13 +1,13 @@
 {
     "name": "solv-cli",
-    "description": "Hot-challenge-solving application for any coding challenge services",
+    "description": "hot-challenge-solving application for any coding challenge services",
     "version": "1.2.2",
     "license": "MIT",
     "publishConfig": {
         "access": "public"
     },
     "scripts": {
-        "build": "tsc",
+        "build": "tsc --project ./tsconfig.build.json",
         "dev": "nodemon",
         "semantic-release": "semantic-release",
         "lint": "eslint \"src/**/*.ts\"",
