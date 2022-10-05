@@ -39,7 +39,7 @@ describe("Programmers Provider", () => {
 
         const provider = new ProgrammersProvider();
         const runTestWithMockedResponse = async (
-            response: string,
+            filePath: string,
             message: string,
             url = "https://school.programmers.co.kr/learn/courses/30/lessons/12937",
         ) => {
@@ -47,7 +47,7 @@ describe("Programmers Provider", () => {
             (fetch as any) = jest.fn().mockResolvedValue({
                 ok: true,
                 text() {
-                    return Promise.resolve(response);
+                    return fs.readFile(path.join(__dirname, filePath)).then(res => res.toString());
                 },
             });
 
@@ -56,24 +56,22 @@ describe("Programmers Provider", () => {
             (fetch as any) = originalFetch;
         };
 
-        await runTestWithMockedResponse("", "Failed to parse challenge information.");
-        await runTestWithMockedResponse(
-            await fs.readFile(path.join(__dirname, "./__snapshots__/programmers.0.html")).then(res => res.toString()),
+        const messages = [
             "Failed to parse challenge input / output samples.",
-        );
-        await runTestWithMockedResponse(
-            await fs.readFile(path.join(__dirname, "./__snapshots__/programmers.1.html")).then(res => res.toString()),
             "Failed to find challenge output sample table.",
-        );
-        await runTestWithMockedResponse(
-            await fs.readFile(path.join(__dirname, "./__snapshots__/programmers.2.html")).then(res => res.toString()),
             "Failed to parse initial code information.",
-        );
-        await runTestWithMockedResponse(
-            await fs.readFile(path.join(__dirname, "./__snapshots__/programmers.3.html")).then(res => res.toString()),
             "Failed to retrieve challenge id.",
-            "https://school.programmers.co.kr/learn/courses/30/lessons/",
-        );
+            "Failed to parse challenge information.",
+            "Failed to parse challenge information.",
+        ];
+
+        for (let i = 0; i < messages.length; i++) {
+            await runTestWithMockedResponse(
+                `./__snapshots__/programmers.${i}.html`,
+                messages[i],
+                "https://school.programmers.co.kr/learn/courses/30/lessons/",
+            );
+        }
     });
 
     it("should parse challenge information from url properly", async () => {

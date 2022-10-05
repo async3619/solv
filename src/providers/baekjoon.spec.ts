@@ -28,7 +28,7 @@ describe("Baekjoon Provider", () => {
 
         const provider = new BaekjoonProvider();
         const runTestWithMockedResponse = async (
-            response: string,
+            filePath: string,
             message: string,
             url = "https://www.acmicpc.net/problem/1018",
         ) => {
@@ -36,7 +36,7 @@ describe("Baekjoon Provider", () => {
             (fetch as any) = jest.fn().mockResolvedValue({
                 ok: true,
                 text() {
-                    return Promise.resolve(response);
+                    return fs.readFile(path.join(__dirname, filePath)).then(res => res.toString());
                 },
             });
 
@@ -45,12 +45,21 @@ describe("Baekjoon Provider", () => {
             (fetch as any) = originalFetch;
         };
 
-        await runTestWithMockedResponse("", "Failed to parse challenge information.");
-        await runTestWithMockedResponse(
-            await fs.readFile(path.join(__dirname, "./__snapshots__/baekjoon.0.html")).then(res => res.toString()),
+        const messages = [
+            "Failed to parse challenge information.",
+            "Failed to parse challenge information.",
+            "Failed to parse challenge information.",
+            "Failed to parse challenge information.",
             "Failed to retrieve challenge id.",
-            "https://www.acmicpc.net/problem/",
-        );
+        ];
+
+        for (let i = 0; i < messages.length; ++i) {
+            await runTestWithMockedResponse(
+                `./__snapshots__/baekjoon.${i}.html`,
+                messages[i],
+                "https://www.acmicpc.net/problem/",
+            );
+        }
     });
 
     it("should parse challenge information from url properly", async () => {
