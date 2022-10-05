@@ -10,6 +10,11 @@ describe("Programmers Provider", () => {
         expect(provider.checkUrl("https://school.programmers.co.kr/learn/courses/30/lessons/12937")).toBeTruthy();
     });
 
+    it("should returns correct name", () => {
+        const provider = new ProgrammersProvider();
+        expect(provider.getName()).toBe("Programmers");
+    });
+
     it("should determine invalid url", () => {
         const provider = new ProgrammersProvider();
 

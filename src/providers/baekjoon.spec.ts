@@ -10,6 +10,11 @@ describe("Baekjoon Provider", () => {
         expect(provider.checkUrl("https://www.acmicpc.net/problem/1018")).toBeTruthy();
     });
 
+    it("should returns correct name", () => {
+        const provider = new BaekjoonProvider();
+        expect(provider.getName()).toBe("Baekjoon");
+    });
+
     it("should determine invalid url", () => {
         const provider = new BaekjoonProvider();
 
