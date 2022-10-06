@@ -2,7 +2,7 @@ import * as chalk from "chalk";
 import { Command } from "commander";
 
 import { serialize } from "./serialize";
-import { InputType } from "./types";
+import { CommandLineArgs, InputType } from "./types";
 
 import { version, description } from "../../package.json";
 
@@ -30,23 +30,25 @@ export function drawLine(length: number, char = "=") {
     console.log(new Array(length).fill(char).join(""));
 }
 
-export async function parseCommandLine(argv: string[]) {
+export async function parseCommandLine(argv: string[]): Promise<CommandLineArgs> {
     const program = await new Command()
         .name("solv")
         .description(description)
         .version(version)
-        .argument("<url>", "Specify a website url to solve")
-        .option("--source, -s <source>", "Specify source code path to watch")
-        .option("--config, -c <config>", "Specify configuration file path")
-        .option("--no-overwrite, -n", "Specify if program should not overwrite source code file")
+        .argument("<url>", "specify a website url to solve")
+        .option("--source, -s <source>", "specify source code path to watch")
+        .option("--config, -c <config>", "specify configuration file path")
+        .option("--no-overwrite, -n", "specify if program should not overwrite source code file")
+        .option("--no-cache, -w", "specify if program should not cache challenge information")
         .parseAsync(argv);
 
-    const { S: source, C: configPath, N: noOverwrite } = program.opts();
+    const { S: source, C: configPath, N: noOverwrite, W: noCache } = program.opts();
     const [targetUrl] = program.args;
 
     return {
         source,
         configPath,
+        noCache,
         noOverwrite,
         targetUrl,
     };
@@ -67,4 +69,8 @@ export function renderSection(title: string, content: InputType, chalkFunction?:
     console.info(chalkFunction ? chalkFunction(actualContent) : actualContent);
 
     breakLine();
+}
+
+export function getVersion() {
+    return version;
 }

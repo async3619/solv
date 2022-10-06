@@ -8,13 +8,14 @@ import { getProvider } from "./providers";
 
 import { breakLine, clearConsole, drawLine, drawLogo, parseCommandLine } from "./utils/cli";
 import { normalizeFilePath } from "./utils/normalizeFilePath";
+import { retrieveChallenge } from "./utils/retrieveChallenge";
 import { runChallenge } from "./utils/runChallenge";
-import { truncate } from "./utils/truncate";
 import { Config } from "./utils/types";
+import { truncate } from "./utils/truncate";
 import logger from "./utils/logger";
 
 async function main() {
-    const { targetUrl, configPath, noOverwrite, source } = await parseCommandLine(process.argv);
+    const { targetUrl, configPath, noCache, noOverwrite, source } = await parseCommandLine(process.argv);
 
     try {
         drawLogo();
@@ -26,10 +27,9 @@ async function main() {
         logger.info(`it seems a code challenge of \`${chalk.yellow(provider.getName())}\` service.`);
         logger.info("trying to fetch and parse challenge information...");
 
-        const challenge = await provider.retrieve(targetUrl);
-        const { title, description } = challenge;
-
-        const targetPath = normalizeFilePath(source || `./${provider.getName().toLowerCase()}_${challenge.id}.ts`);
+        const challenge = await retrieveChallenge(targetUrl, provider, noCache);
+        const { title, description, id, initialCode } = await retrieveChallenge(targetUrl, provider, noCache);
+        const targetPath = normalizeFilePath(source || `./${provider.getName().toLowerCase()}_${id}.ts`);
         logger.info(`use following url: ${targetUrl}`);
         logger.info(`use following source code path: ${targetPath}`);
 
@@ -53,11 +53,11 @@ async function main() {
 
                 if (overwrite) {
                     await fs.unlink(targetPath);
-                    await fs.writeFile(targetPath, challenge.initialCode || "");
+                    await fs.writeFile(targetPath, initialCode || "");
                 }
             }
         } else {
-            await fs.writeFile(targetPath, challenge.initialCode || "");
+            await fs.writeFile(targetPath, initialCode || "");
         }
 
         logger.info("successfully retrieved challenge information:");

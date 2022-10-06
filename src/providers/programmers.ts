@@ -16,6 +16,12 @@ export class ProgrammersProvider extends BaseProvider {
             url,
         );
     }
+    public getId(url: string): string | number {
+        const targetUrl = new URL(url);
+        const id = targetUrl.pathname.split("/").slice(-1)[0];
+
+        return parseInt(id);
+    }
 
     public serializeOutput(outputItem: any): string {
         return typeof outputItem === "string" ? `"${outputItem}"` : JSON.stringify(outputItem);

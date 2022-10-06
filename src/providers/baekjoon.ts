@@ -5,6 +5,31 @@ import { Challenge } from "../utils/types";
 
 import { BaseProvider } from "./base";
 
+const INITIAL_CODE = `function solution(input: string[]) {
+    // ...
+}
+
+(callback => {
+    if (typeof process !== "undefined" && "env" in process && "arguments" in process.env && process.env.arguments) {
+        solution(process.env.arguments.split("\\n"));
+        return;
+    }
+
+    const readline = require("readline");
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    const input: string[] = [];
+    rl.on("line", line => {
+        input.push(line);
+    }).on("close", function () {
+        callback(input);
+        process.exit();
+    });
+})(solution);`.trim();
+
 export class BaekjoonProvider extends BaseProvider {
     private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/[1-9]([0-9]*)$/;
 
@@ -14,6 +39,12 @@ export class BaekjoonProvider extends BaseProvider {
 
     public checkUrl(url: string) {
         return this.urlRegex.test(url);
+    }
+    public getId(url: string): string | number {
+        const targetUrl = new URL(url);
+        const id = targetUrl.pathname.split("/").slice(-1)[0];
+
+        return parseInt(id);
     }
 
     public async retrieve(url: string): Promise<Challenge> {
@@ -55,32 +86,7 @@ export class BaekjoonProvider extends BaseProvider {
             input: ioText.filter(([i]) => i).map(([, t]) => t),
             output: ioText.filter(([i]) => !i).map(([, t]) => decode(t).replace(/\r\n/g, "\n")),
             provider: this,
-            initialCode: `
-function solution(input: string[]) {
-    // ...
-}
-
-(callback => {
-    if (typeof process !== "undefined" && "env" in process && "arguments" in process.env && process.env.arguments) {
-        solution(process.env.arguments.split("\\n"));
-        return;
-    }
-
-    const readline = require("readline");
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    const input: string[] = [];
-    rl.on("line", line => {
-        input.push(line);
-    }).on("close", function () {
-        callback(input);
-        process.exit();
-    });
-})(solution);
-`.trim(),
+            initialCode: INITIAL_CODE,
         };
     }
 }

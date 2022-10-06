@@ -1,12 +1,22 @@
 import fetch from "node-fetch";
 
 import { Challenge, InputType } from "../utils/types";
+import { CachedChallenge } from "../utils/retrieveChallenge";
 
 export abstract class BaseProvider {
     public abstract checkUrl(url: string): boolean;
     public abstract retrieve(url: string): Promise<Challenge>;
+    public abstract getId(url: string): string | number;
 
     protected constructor(public readonly needJs: boolean) {}
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public hydrateCache({ version, ...challenge }: CachedChallenge): Challenge {
+        return {
+            ...challenge,
+            provider: this,
+        };
+    }
 
     public serializeOutput(outputItem: any): string {
         return typeof outputItem !== "string" ? JSON.stringify(outputItem) : outputItem;

@@ -30,3 +30,11 @@ interface ConfigCaseItem {
 export interface Config {
     cases: ConfigCaseItem[];
 }
+
+export interface CommandLineArgs {
+    source?: string;
+    configPath?: string;
+    noCache?: boolean;
+    noOverwrite?: boolean;
+    targetUrl: string;
+}
