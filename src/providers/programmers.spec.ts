@@ -5,6 +5,11 @@ import * as path from "path";
 import { ProgrammersProvider } from "./programmers";
 
 describe("Programmers Provider", () => {
+    it("should get valid id from url", function () {
+        const provider = new ProgrammersProvider();
+        expect(provider.getId("https://school.programmers.co.kr/learn/courses/30/lessons/12937")).toBe(12937);
+    });
+
     it("should determine valid url", () => {
         const provider = new ProgrammersProvider();
         expect(provider.checkUrl("https://school.programmers.co.kr/learn/courses/30/lessons/12937")).toBeTruthy();

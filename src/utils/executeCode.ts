@@ -8,11 +8,12 @@ import { InputType } from "./types";
 
 const replaceExt = require("replace-ext");
 
-export async function transpileAndRun(
+export async function executeCode(
     input: InputType,
     output: string,
     targetPath: string,
     provider: BaseProvider,
+    noTranspile = false,
 ): Promise<[string, string] | Error> {
     let fileContent = await fs.readFile(targetPath).then(res => res.toString());
     fileContent = provider.beforeExecute(fileContent, input);
@@ -21,7 +22,7 @@ export async function transpileAndRun(
         loader: "ts",
     });
 
-    if (provider.needJs) {
+    if (provider.needJs && !noTranspile) {
         const transpiledFilePath = replaceExt(targetPath, ".js");
         await fs.writeFile(transpiledFilePath, transpiledContent.code);
     }

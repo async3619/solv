@@ -36,5 +36,6 @@ export interface CommandLineArgs {
     configPath?: string;
     noCache?: boolean;
     noOverwrite?: boolean;
+    noTranspile?: boolean;
     targetUrl: string;
 }

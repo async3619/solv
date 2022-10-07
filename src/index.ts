@@ -15,7 +15,7 @@ import { truncate } from "./utils/truncate";
 import logger from "./utils/logger";
 
 async function main() {
-    const { targetUrl, configPath, noCache, noOverwrite, source } = await parseCommandLine(process.argv);
+    const { targetUrl, configPath, noCache, noOverwrite, source, noTranspile } = await parseCommandLine(process.argv);
 
     try {
         drawLogo();
@@ -69,7 +69,7 @@ async function main() {
         logger.info(` - for more information, you can visit: ${targetUrl}`);
         logger.info(`now start watching changes of '${targetPath}' ...`);
 
-        await runChallenge(challenge, targetPath, config);
+        await runChallenge(challenge, targetPath, config, noTranspile);
         const watcher = chokidar.watch(targetPath);
 
         watcher
@@ -77,7 +77,7 @@ async function main() {
                 clearConsole();
                 logger.info("File change detected, now trying to transpile and execute:");
 
-                runChallenge(challenge, targetPath, config).then();
+                runChallenge(challenge, targetPath, config, noTranspile).then();
             })
             .on("delete", () => {
                 logger.error(`'${targetPath}' seems to be deleted.`);

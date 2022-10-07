@@ -1,7 +1,7 @@
 import * as fs from "fs-extra";
 
 import { BaekjoonProvider } from "../providers/baekjoon";
-import { transpileAndRun } from "./transpileAndRun";
+import { executeCode } from "./executeCode";
 
 const SAMPLE_CODE = `
 function solution(input: string[]) {
@@ -30,7 +30,7 @@ function solution(input: string[]) {
 })(solution);
 `.trim();
 
-describe("transpileAndRun", () => {
+describe("executeCode", () => {
     it("should transpiles and runs given code properly", async () => {
         jest.mock("fs-extra");
         (fs.readFile as any) = () =>
@@ -44,7 +44,7 @@ foo([]);
         `);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        const result = await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
+        const result = await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toStrictEqual(["Hello World!", "Debug message."]);
     });
 
@@ -53,7 +53,7 @@ foo([]);
         (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        expect(await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider())).toMatchSnapshot();
+        expect(await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider())).toMatchSnapshot();
     });
 
     it("should pass JSON serialized input data", async () => {
@@ -62,7 +62,7 @@ foo([]);
         (fs.writeFile as any) = () => Promise.resolve();
 
         expect(
-            await transpileAndRun([`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
+            await executeCode([`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
         ).toMatchSnapshot();
     });
 
@@ -71,7 +71,7 @@ foo([]);
         (fs.readFile as any) = () => Promise.resolve(`throw new Error("Test error")`);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        const result = await transpileAndRun("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
+        const result = await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toMatchSnapshot();
     });
 });

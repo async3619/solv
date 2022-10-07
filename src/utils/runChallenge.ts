@@ -7,7 +7,7 @@ import { BaseProvider } from "../providers/base";
 
 import { breakLine, renderSection } from "./cli";
 import { TestCaseFailedError } from "./TestCaseFailedError";
-import { transpileAndRun } from "./transpileAndRun";
+import { executeCode } from "./executeCode";
 import { normalizeString } from "./normalizeString";
 
 export async function runTestCase(
@@ -17,9 +17,10 @@ export async function runTestCase(
     targetPath: string,
     provider: BaseProvider,
     isCustom = false,
+    noTranspile = false,
 ) {
     try {
-        const data = await transpileAndRun(input, output, targetPath, provider);
+        const data = await executeCode(input, output, targetPath, provider, noTranspile);
         if (data instanceof Error) {
             throw data;
         }
@@ -41,7 +42,12 @@ export async function runTestCase(
     }
 }
 
-export async function runChallenge(challenge: Challenge, targetPath: string, config: Config | null) {
+export async function runChallenge(
+    challenge: Challenge,
+    targetPath: string,
+    config: Config | null,
+    noTranspile = false,
+) {
     breakLine();
 
     const items: InputOutput[] = [];
@@ -75,7 +81,7 @@ export async function runChallenge(challenge: Challenge, targetPath: string, con
     const instance = new Listr([
         ...items.map(({ input, output, isCustom }, index) => ({
             title: `Running with ${isCustom ? "custom " : ""}test case #${index + 1}`,
-            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom),
+            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom, noTranspile),
         })),
     ]);
 

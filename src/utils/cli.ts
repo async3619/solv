@@ -38,11 +38,12 @@ export async function parseCommandLine(argv: string[]): Promise<CommandLineArgs>
         .argument("<url>", "specify a website url to solve")
         .option("--source, -s <source>", "specify source code path to watch")
         .option("--config, -c <config>", "specify configuration file path")
+        .option("--no-transpile, -t", "specify if program should not transpile source code")
         .option("--no-overwrite, -n", "specify if program should not overwrite source code file")
         .option("--no-cache, -w", "specify if program should not cache challenge information")
         .parseAsync(argv);
 
-    const { S: source, C: configPath, N: noOverwrite, W: noCache } = program.opts();
+    const { S: source, C: configPath, N: noOverwrite, W: noCache, T: noTranspile } = program.opts();
     const [targetUrl] = program.args;
 
     return {
@@ -50,6 +51,7 @@ export async function parseCommandLine(argv: string[]): Promise<CommandLineArgs>
         configPath,
         noCache,
         noOverwrite,
+        noTranspile,
         targetUrl,
     };
 }

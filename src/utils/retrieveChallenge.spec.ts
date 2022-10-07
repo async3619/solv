@@ -3,6 +3,7 @@ import * as yaml from "yaml";
 import * as path from "path";
 
 import { CachedChallenge, retrieveChallenge } from "./retrieveChallenge";
+import { getVersion } from "./cli";
 
 import { BaekjoonProvider } from "../providers/baekjoon";
 
@@ -37,9 +38,14 @@ describe("retrieveChallenge", () => {
 
         let read = false;
         const readFile = fs.readFile;
-        (fs.readFile as any) = () => {
+        (fs.readFile as any) = async () => {
             read = true;
-            return readFile(path.join(__dirname, "__snapshots__", "cache.yml"));
+
+            const data = await readFile(path.join(__dirname, "__snapshots__", "cache.yml")).then(buf => buf.toString());
+            const cache: CachedChallenge = yaml.parse(data);
+            cache.version = getVersion();
+
+            return Buffer.from(yaml.stringify(cache));
         };
         (fs.ensureDir as any) = () => Promise.resolve();
         (fs.existsSync as any) = () => true;
