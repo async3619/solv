@@ -5,30 +5,13 @@ import { Challenge } from "../utils/types";
 
 import { BaseProvider } from "./base";
 
-const INITIAL_CODE = `function solution(input: string[]) {
+const INITIAL_CODE = `
+function solution(input: string[]) {
     // ...
 }
 
-(callback => {
-    if (typeof process !== "undefined" && "env" in process && "arguments" in process.env && process.env.arguments) {
-        solution(process.env.arguments.split("\\n"));
-        return;
-    }
-
-    const readline = require("readline");
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    const input: string[] = [];
-    rl.on("line", line => {
-        input.push(line);
-    }).on("close", function () {
-        callback(input);
-        process.exit();
-    });
-})(solution);`.trim();
+solution((global?.process?.env?.arguments || require("fs").readFileSync("/dev/stdin").toString()).trim().split("\\n"));
+`.trim();
 
 export class BaekjoonProvider extends BaseProvider {
     private readonly urlRegex = /^https?:\/\/(www\.)?acmicpc\.net\/problem\/[1-9]([0-9]*)$/;
