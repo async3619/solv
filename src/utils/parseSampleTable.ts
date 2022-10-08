@@ -1,8 +1,9 @@
-import * as _ from "lodash";
 import { HTMLElement, Node, NodeType } from "node-html-parser";
 import { decode } from "html-entities";
 
 import { Challenge } from "./types";
+
+const chunk = require("lodash.chunk");
 
 function getAllChildren(element: Node, tagName: string, depth = 0) {
     const result: Node[] = [element];
@@ -11,11 +12,10 @@ function getAllChildren(element: Node, tagName: string, depth = 0) {
     }
 
     return depth === 0
-        ? _.chain(result)
+        ? result
               .filter(e => element !== e)
               .filter(e => e.nodeType === NodeType.ELEMENT_NODE)
               .filter(e => (e as HTMLElement).tagName === tagName)
-              .value()
         : result;
 }
 
@@ -32,10 +32,10 @@ export function parseSampleTable(table: HTMLElement): Pick<Challenge, "output" |
     };
 
     const columns = getAllChildren(head, "TH").map(node => node.textContent.trim());
-    const rows = _.chain(getAllChildren(body, "TD"))
-        .map(node => node.textContent.trim())
-        .chunk(columns.length)
-        .value();
+    const rows = chunk(
+        getAllChildren(body, "TD").map(node => node.textContent.trim()),
+        columns.length,
+    );
 
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
