@@ -51,12 +51,14 @@ Usage: solv [options] <url>
 hot-challenge-solving application for any coding challenge services
 
 Arguments:
-  url                    Specify a website url to solve
+  url                    specify a website url to solve
 
 Options:
   -V, --version          output the version number
-  --source, -s <source>  Specify source code path to watch
-  --config, -c <config>  Specify configuration file path
-  --no-overwrite, -n     Specify if program should not overwrite source code file
+  --source, -s <source>  specify source code path to watch
+  --config, -c <config>  specify configuration file path
+  --no-transpile, -t     specify if program should not transpile source code
+  --no-overwrite, -n     specify if program should not overwrite source code file
+  --no-cache, -w         specify if program should not cache challenge information
   -h, --help             display help for command
 ```
