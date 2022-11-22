@@ -50,6 +50,7 @@ export async function executeCode(
     });
 
     vm.on("console.log", handleConsoleMessage(outputBuffer));
+    vm.on("console.info", handleConsoleMessage(outputBuffer));
     vm.on("console.warn", handleConsoleMessage(outputBuffer));
     vm.on("console.error", handleConsoleMessage(outputBuffer));
     vm.on("console.debug", handleConsoleMessage(debugBuffer));
