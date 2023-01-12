@@ -105,7 +105,7 @@ export class LeetCodeProvider extends BaseProvider {
             const outputs: string[] = [];
             for (const summary of testCaseSummaries) {
                 const [input, output] = summary.split("\n").map(item => {
-                    return item.trim().replace(/^[A-Za-z]*?: /, "");
+                    return item.trim().replace(/^[A-Za-z]*?: ?/, "");
                 });
 
                 const inputParameters = input.split(/, /).map(item => item.split(" = "));
@@ -120,7 +120,7 @@ export class LeetCodeProvider extends BaseProvider {
                 }
 
                 inputs.push(data);
-                outputs.push(output.replace("Output: ", ""));
+                outputs.push(output.replace(/"/g, ""));
             }
 
             return {
