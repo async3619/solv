@@ -4,11 +4,12 @@ import { NodeVM } from "vm2";
 
 import { BaseProvider } from "../providers/base";
 
-import { InputType } from "./types";
+import { Challenge, InputType } from "./types";
 
 const replaceExt = require("replace-ext");
 
 export async function executeCode(
+    challenge: Challenge,
     input: InputType,
     output: string,
     targetPath: string,
@@ -16,7 +17,7 @@ export async function executeCode(
     noTranspile = false,
 ): Promise<[string, string] | Error> {
     let fileContent = await fs.readFile(targetPath).then(res => res.toString());
-    fileContent = provider.beforeExecute(fileContent, input);
+    fileContent = provider.beforeExecute(fileContent, input, challenge);
 
     const transpiledContent = esbuild.transformSync(fileContent, {
         loader: "ts",

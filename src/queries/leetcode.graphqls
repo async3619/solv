@@ -1,0 +1,18 @@
+type CodeSnippet {
+    lang: String!
+    langSlug: String!
+    code: String!
+}
+
+type Question {
+    questionId: String!
+    questionTitle: String!
+    exampleTestcaseList: [String!]!
+    metaData: String!
+    content: String!
+    codeSnippets: [CodeSnippet!]!
+}
+
+type Query {
+    question(titleSlug: String!): Question
+}

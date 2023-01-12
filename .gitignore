@@ -7,3 +7,4 @@
 /baekjoon_*.js
 /.solv.yml
 /coverage
+/leetcode_*.ts

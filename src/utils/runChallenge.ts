@@ -11,6 +11,7 @@ import { executeCode } from "./executeCode";
 import { normalizeString } from "./normalizeString";
 
 export async function runTestCase(
+    challenge: Challenge,
     index: number,
     input: InputType,
     output: string,
@@ -20,7 +21,7 @@ export async function runTestCase(
     noTranspile = false,
 ) {
     try {
-        const data = await executeCode(input, output, targetPath, provider, noTranspile);
+        const data = await executeCode(challenge, input, output, targetPath, provider, noTranspile);
         if (data instanceof Error) {
             throw data;
         }
@@ -81,7 +82,8 @@ export async function runChallenge(
     const instance = new Listr([
         ...items.map(({ input, output, isCustom }, index) => ({
             title: `Running with ${isCustom ? "custom " : ""}test case #${index + 1}`,
-            task: () => runTestCase(index, input, output, targetPath, challenge.provider, isCustom, noTranspile),
+            task: () =>
+                runTestCase(challenge, index, input, output, targetPath, challenge.provider, isCustom, noTranspile),
         })),
     ]);
 

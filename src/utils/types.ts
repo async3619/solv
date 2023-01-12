@@ -13,6 +13,8 @@ export interface Challenge {
     needJs?: boolean;
     provider: BaseProvider;
     initialCode?: string;
+    useFunction?: boolean;
+    functionName?: string;
 }
 
 export interface InputOutput {

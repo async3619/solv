@@ -7,13 +7,15 @@
         "access": "public"
     },
     "scripts": {
-        "build": "tsc --project ./tsconfig.build.json",
-        "dev": "nodemon",
+        "build": "ttsc --project ./tsconfig.build.json",
+        "dev": "cross-env TS_NODE_COMPILER=ttypescript node -r ts-node/register ./src/index.ts",
+        "watch": "cross-env TS_NODE_COMPILER=ttypescript node -r ts-node/register --watch ./src/index.ts",
         "semantic-release": "semantic-release",
         "lint": "eslint \"src/**/*.ts\"",
         "prepublishOnly": "npm run build",
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "codegen": "graphql-codegen --config codegen.ts"
     },
     "bin": {
         "solv": "./bin/solv.cjs"
@@ -25,6 +27,10 @@
         "package.json"
     ],
     "devDependencies": {
+        "@graphql-codegen/cli": "^2.16.4",
+        "@graphql-codegen/client-preset": "^1.2.6",
+        "@graphql-codegen/typescript": "^2.8.7",
+        "@graphql-codegen/typescript-operations": "^2.5.12",
         "@semantic-release/commit-analyzer": "^9.0.2",
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/github": "^8.0.6",
@@ -41,6 +47,7 @@
         "@types/uuid": "^8.3.4",
         "@typescript-eslint/eslint-plugin": "^5.38.0",
         "@typescript-eslint/parser": "^5.38.0",
+        "cross-env": "^7.0.3",
         "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -51,14 +58,18 @@
         "semantic-release": "^19.0.5",
         "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1",
+        "ttypescript": "^1.5.15",
         "typescript": "^4.8.3"
     },
     "dependencies": {
+        "@urql/core": "^3.1.1",
         "chalk": "^4.1.2",
         "chokidar": "^3.5.3",
         "commander": "^9.4.1",
         "esbuild": "^0.15.9",
         "fs-extra": "^10.1.0",
+        "graphql": "^16.6.0",
+        "graphql-tag": "^2.12.6",
         "html-entities": "^2.3.3",
         "listr": "^0.14.3",
         "lodash.chunk": "^4.2.0",
@@ -67,6 +78,8 @@
         "node-html-parser": "^6.1.0",
         "prompts": "^2.4.2",
         "replace-ext": "^2.0.0",
+        "string-strip-html": "8.3.0",
+        "typia": "^3.4.20",
         "uuid": "^9.0.0",
         "vm2": "^3.9.11",
         "yaml": "^2.1.2"

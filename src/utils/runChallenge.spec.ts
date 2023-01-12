@@ -37,7 +37,7 @@ describe("runTestCase", () => {
         (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        await runTestCase(0, "Test", "Test", "./test.ts", new BaekjoonProvider());
+        await runTestCase({} as any, 0, "Test", "Test", "./test.ts", new BaekjoonProvider());
     });
 
     it("should throws an error when output is not match", async () => {
@@ -46,9 +46,9 @@ describe("runTestCase", () => {
         (fs.writeFile as any) = () => Promise.resolve();
         expect.assertions(1);
 
-        await expect(runTestCase(0, "Test", "Wrong Answer", "./test.ts", new BaekjoonProvider())).rejects.toThrow(
-            "Output was not matched with test case #1",
-        );
+        await expect(
+            runTestCase({} as any, 0, "Test", "Wrong Answer", "./test.ts", new BaekjoonProvider()),
+        ).rejects.toThrow("Output was not matched with test case #1");
     });
 
     it("should throws an error when given source thrown", async () => {
@@ -62,9 +62,9 @@ describe("runTestCase", () => {
         (fs.writeFile as any) = () => Promise.resolve();
         expect.assertions(1);
 
-        await expect(runTestCase(0, "Test", "Wrong Answer", "./test.ts", new BaekjoonProvider())).rejects.toThrow(
-            "Test case failed with an error",
-        );
+        await expect(
+            runTestCase({} as any, 0, "Test", "Wrong Answer", "./test.ts", new BaekjoonProvider()),
+        ).rejects.toThrow("Test case failed with an error");
     });
 });
 

@@ -20,7 +20,12 @@
         "noImplicitAny": false,
         "strictBindCallApply": true,
         "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false
+        "noFallthroughCasesInSwitch": false,
+        "plugins": [
+            {
+                "transform": "typia/lib/transform",
+            }
+        ]
     },
     "exclude": ["node_modules", "**/*spec.ts", "./*.ts"]
 }

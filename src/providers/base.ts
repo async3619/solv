@@ -23,7 +23,7 @@ export abstract class BaseProvider {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public beforeExecute(sourceCode: string, input: InputType): string {
+    public beforeExecute(sourceCode: string, input: InputType, challenge: Challenge): string {
         return sourceCode;
     }
 

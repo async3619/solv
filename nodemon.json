@@ -1,7 +1,0 @@
-{
-    "verbose": true,
-    "ignore": ["*.test.js", "bin", "dist", ".git"],
-    "watch": ["src"],
-    "ext": "ts",
-    "exec": "yarn build && solv https://school.programmers.co.kr/learn/courses/30/lessons/68647 -n"
-}
