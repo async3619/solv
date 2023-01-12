@@ -82,22 +82,7 @@ export class LeetCodeProvider extends BaseProvider {
             }
 
             const document = parseDOM(data.question.content);
-            const testCases = [...document.querySelectorAll("pre")].filter(item => {
-                if (!item.parentNode) {
-                    return false;
-                }
-
-                if (!item.previousElementSibling) {
-                    return false;
-                }
-
-                const title = item.previousElementSibling.querySelector("strong.example");
-                if (!title) {
-                    return false;
-                }
-
-                return true;
-            });
+            const testCases = [...document.querySelectorAll("p:has(strong.example) ~ pre")];
 
             const metadata = assertParse<QuestionMetadata>(data.question.metaData);
             const testCaseSummaries = testCases.map(item => stripHtml(item.textContent.trim()).result);
