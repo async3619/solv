@@ -93,15 +93,17 @@ export class LeetCodeProvider extends BaseProvider {
                     return item.trim().replace(/^[A-Za-z]*?: ?/, "");
                 });
 
-                const inputParameters = input.split(/, /).map(item => item.split(" = "));
                 const data: InputType = [];
-                for (const [key, value] of inputParameters) {
-                    const index = metadata.params.findIndex(item => item.name === key);
-                    if (index === -1) {
-                        throw new Error(`Failed to find parameter "${key}".`);
+                for (let i = 0; i < metadata.params.length; i++) {
+                    const { name } = metadata.params[i];
+                    const finishing = i === metadata.params.length - 1 ? "$" : ",";
+                    const regex = new RegExp(`${name} = (.*)${finishing}`);
+                    const match = regex.exec(input);
+                    if (!match || !match[1]) {
+                        throw new Error(`Failed to find parameter "${name}".`);
                     }
 
-                    data[index] = value;
+                    data[i] = match[1];
                 }
 
                 inputs.push(data);
