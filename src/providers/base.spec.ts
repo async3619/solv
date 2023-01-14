@@ -12,7 +12,7 @@ describe("Base Provider", () => {
 
     it("should modify source code before run properly", () => {
         const provider = new BaekjoonProvider();
-        expect(provider.beforeExecute("123", "123")).toBe("123");
+        expect(provider.beforeExecute("123", "123", {} as any)).toBe("123");
     });
 
     it("should throws an error when it failed to fetch url", async () => {

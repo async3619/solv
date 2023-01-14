@@ -44,7 +44,7 @@ foo([]);
         `);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        const result = await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
+        const result = await executeCode({} as any, "Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toStrictEqual(["Hello World!", "Debug message."]);
     });
 
@@ -53,7 +53,9 @@ foo([]);
         (fs.readFile as any) = () => Promise.resolve(SAMPLE_CODE);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        expect(await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider())).toMatchSnapshot();
+        expect(
+            await executeCode({} as any, "Test", "Hello World!", "__MOCKED__", new BaekjoonProvider()),
+        ).toMatchSnapshot();
     });
 
     it("should pass JSON serialized input data", async () => {
@@ -62,7 +64,7 @@ foo([]);
         (fs.writeFile as any) = () => Promise.resolve();
 
         expect(
-            await executeCode([`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
+            await executeCode({} as any, [`["Test", "Test2"]`], "Hello World!", "__MOCKED__", new BaekjoonProvider()),
         ).toMatchSnapshot();
     });
 
@@ -71,7 +73,7 @@ foo([]);
         (fs.readFile as any) = () => Promise.resolve(`throw new Error("Test error")`);
         (fs.writeFile as any) = () => Promise.resolve();
 
-        const result = await executeCode("Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
+        const result = await executeCode({} as any, "Test", "Hello World!", "__MOCKED__", new BaekjoonProvider());
         expect(result).toMatchSnapshot();
     });
 });
