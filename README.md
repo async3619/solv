@@ -31,11 +31,11 @@ Solv [sɑːlv] is a cli application for solving coding challenges with live upda
 
 ### Compatibility
 
-| Name                                           | Support?            |
-|------------------------------------------------|---------------------|
-| [Baekjoon (acmicpc)](https://www.acmicpc.net/) | ✅                   |
-| [Programmers](https://programmers.co.kr/)      | ⚠️ (Partially, WIP) |
-| [LeetCode](https://leetcode.com/)              | ❌                   |
+| Name                                           | Support?             |
+|------------------------------------------------|----------------------|
+| [Baekjoon (acmicpc)](https://www.acmicpc.net/) | ✅                    |
+| [Programmers](https://programmers.co.kr/)      | ⚠️ (Partially, WIP)  |
+| [LeetCode](https://leetcode.com/)              | ⚠️ (Partially, WIP)  |
 
 ## Installation
 
