@@ -15,6 +15,16 @@ const config: JestConfigWithTsJest = {
     ],
     modulePathIgnorePatterns: ["<rootDir>/dist/"],
     testPathIgnorePatterns: ["<rootDir>/dist/"],
+    transform: {
+        // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+        // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+        "^.+\\.tsx?$": [
+            "ts-jest",
+            {
+                compiler: "ttypescript",
+            },
+        ],
+    },
 };
 
 export = config;
