@@ -96,7 +96,7 @@ export class LeetCodeProvider extends BaseProvider {
                 const data: InputType = [];
                 for (let i = 0; i < metadata.params.length; i++) {
                     const { name } = metadata.params[i];
-                    const finishing = i === metadata.params.length - 1 ? "$" : ",";
+                    const finishing = i === metadata.params.length - 1 ? "$" : `, ${metadata.params[i + 1].name}`;
                     const regex = new RegExp(`${name} = (.*)${finishing}`);
                     const match = regex.exec(input);
                     if (!match || !match[1]) {
